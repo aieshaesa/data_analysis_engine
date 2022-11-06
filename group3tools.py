@@ -23,7 +23,7 @@ def mean(number_list: list) -> float:
     length = 0
     calculatedMean = 0
 
-    for number in list:
+    for number in number_list:
         sum = sum + number
         length = length + 1
     
