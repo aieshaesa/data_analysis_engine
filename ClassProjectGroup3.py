@@ -10,7 +10,8 @@
 # DESCRIPTION: Implementation Basic Data Analysis Routines
 #####################################################################
 
-def mean(number_list: list) -> float:
+# 11/5/2022
+def mean(number_list):
     """Computes the mean of a list of numbers.
 
     Args: 
