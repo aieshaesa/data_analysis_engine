@@ -10,25 +10,48 @@
 # DESCRIPTION: Implementation Basic Data Analysis Routines
 #####################################################################
 
-# 11/5/2022
+
+##########[ Part 3 Functions]##########
+
 def mean(number_list):
-    """Computes the mean of a list of numbers.
+    listSum = sum(number_list)
+    length = len(number_list)
 
-    Args: 
-        number_list: A list containing numbers or floats.
-    
-    Returns: 
-        A float representing the mean.
-    """
+    return listSum / length
 
-    sum = 0
-    length = 0
-    calculatedMean = 0
+# Returns the mode of a list. It reads a sorted (ascending) list of numbers to get its mode.
+# it will record a total of same numbers iterated over in the list, until it hits a new number,
+# where the total resets to 1 again. The last number that has more occurrences of itself is returned.
+def mode(number_list):
+    sortedList = sorted(number_list) # list must be sorted in ascending order. Auto-sort the list.
+    lastNum = sortedList[0]
+    lastNumOccurrences = 0
+    currentNumOccurrences = 0
 
-    for number in number_list:
-        sum = sum + number
-        length = length + 1
-    
-    calculatedMean = sum / length
+    mode = sortedList[0]
 
-    return calculatedMean
+    for num in sortedList:
+        if lastNum == num:
+            # increment this number's occurence as long as we keep iterating over the same number
+            currentNumOccurrences += 1
+        
+        # if this number's occurrences passes the previous number's occurrences, make this number the new mode.
+        if currentNumOccurrences > lastNumOccurrences:            
+            mode = lastNum
+            lastNumOccurrences = currentNumOccurrences
+
+        # if this current number we are reading isn't the same as the last number iterated, 
+        # reset the occurrences value for this new number.
+        if lastNum != num:
+            currentNumOccurrences = 1
+        
+        # set the previous iterated item to this (current) one.
+        lastNum = num
+
+    return mode
+
+def maximum(number_list):
+    return max(number_list)
+
+def minimum(number_list):
+    return min(number_list)
