@@ -11,16 +11,16 @@ Tasks:
 - Print the first 100, 1000, or 5000 rows of the dataset as selected by the user AIESHA
 
 
-Functions:
-- Count 
-- Unique SPENCER(DONE)
-- Mean
-- Median AIESHA
-- Mode
-- Standard Deviation
-- Variance
-- Minimum
-- Maximum
+Part 3Functions:
+- Count SPENDER
+- Unique SPENCER (DONE)
+- Mean HECTOR (DONE)
+- Median AIESHA/MOSTAFA (DONE)
+- Mode HECTOR (DONE)
+- Standard Deviation MOSTAFA (DONE)
+- Variance MOSTAFA (DONE)
+- Minimum HECTOR (DONE)
+- Maximum HECTOR (DONE)
 - 20 Percentile
 - 40 Percentile
 - 60 Percentile
