@@ -17,3 +17,17 @@ def standard_deviation(number_list):
     standardDeviation = math.sqrt(var)
 
     return standardDeviation
+
+def median(number_list):
+    count = len(number_list)
+
+    # divide count by 2 then round the result down.
+    index = count // 2
+
+    sorted_list = sorted(number_list)
+
+    # if list count is divisible by 2
+    if count % 2:
+        return sorted_list[index]
+    
+    return sum(sorted_list)
