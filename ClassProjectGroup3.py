@@ -47,7 +47,7 @@ def mode(number_list):
         
         # set the previous iterated item to this (current) one.
         lastNum = num
-
+    
     return mode
 
 def maximum(number_list):
@@ -55,3 +55,27 @@ def maximum(number_list):
 
 def minimum(number_list):
     return min(number_list)
+
+def count(number_list):
+    return len(number_list)
+
+def median(number_list):
+
+    count = len(number_list)
+
+    index = count // 2
+
+    if count % 2:
+        return sorted (number_list) [index]
+
+    return sum(sorted(number_list))
+
+def variance(number_list):
+    n = len(number_list)
+    mean = sum(number_list)
+
+    difference  = [(x - mean) ** 2 for x in data]
+
+    variance = sum(difference) / n
+
+    return variance
