@@ -10,6 +10,7 @@
 # DESCRIPTION: Implementation Basic Data Analysis Routines
 #####################################################################
 
+import csv
 
 ##########[ Part 3 Functions]##########
 
@@ -47,7 +48,7 @@ def mode(number_list):
         
         # set the previous iterated item to this (current) one.
         lastNum = num
-    
+
     return mode
 
 def maximum(number_list):
@@ -56,26 +57,34 @@ def maximum(number_list):
 def minimum(number_list):
     return min(number_list)
 
-def count(number_list):
-    return len(number_list)
+##########[ Part 1 Data Loading]##########
 
-def median(number_list):
-
-    count = len(number_list)
-
-    index = count // 2
-
-    if count % 2:
-        return sorted (number_list) [index]
-
-    return sum(sorted(number_list))
-
-def variance(number_list):
-    n = len(number_list)
-    mean = sum(number_list)
-
-    difference  = [(x - mean) ** 2 for x in data]
-
-    variance = sum(difference) / n
-
-    return variance
+#open csv file
+with open('InputDataSample.csv') as csv_file:
+    # creating an object of csv reader
+    # with the delimiter
+    csv_reader = csv.reader(csv_file, delimiter = ',')
+ 
+    # list to store the names of columns
+    column = []
+ 
+    # loop to iterate through the rows of csv
+    for row in csv_reader:
+ 
+        # adding first row
+        column.append(row)
+ 
+        # breaking the loop after the
+        # first iteration itself
+        break
+    # number of columns
+    size = int(len(column[0]))
+    reader = csv.reader(csv_file)
+    # stores each column into array
+    columns_as_lists = [list(c) for c in zip(*reader)]
+    for i in range(size):
+        # print each column
+        print(columns_as_lists[i])  # All the values in the first column of your CSV
+        
+# print total number of columns
+print("Total columns:", size)
