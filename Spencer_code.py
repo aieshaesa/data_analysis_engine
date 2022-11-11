@@ -45,6 +45,24 @@ print("Total columns:", size)
 
 ##########[ Part 3 Functions]##########
 
+def count(fileName):
+    #counts total rows & columns
+    with open(fileName, 'r') as fp:
+        count = 0
+
+        reader = csv.reader(fp, delimiter=' ', skipinitialspace=True)
+        first_row = next(reader)
+        num_cols = len(first_row)
+        List = first_row
+        
+        #reader = re.findall('([\d]+) [\d]+')
+        #first_row = next(reader)
+        #num_cols = len(first_row)
+
+        for lines in fp:
+            count = count + 1
+    return count + 1
+
 def mean(number_list):
     listSum = sum(number_list)
     length = len(number_list)
