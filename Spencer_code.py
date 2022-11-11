@@ -10,40 +10,10 @@
 # DESCRIPTION: Implementation Basic Data Analysis Routines
 #####################################################################
 
-##########[ Part 1 Data Loading]##########
-
-import csv
-
-#open csv file
-with open('InputDataSample.csv') as csv_file:
-    # creating an object of csv reader
-    # with the delimiter
-    csv_reader = csv.reader(csv_file, delimiter = ',')
- 
-    # list to store the names of columns
-    column = []
- 
-    # loop to iterate through the rows of csv
-    for row in csv_reader:
- 
-        # adding first row
-        column.append(row)
- 
-        # breaking the loop after the
-        # first iteration itself
-        break
-    # number of columns
-    size = int(len(column[0]))
-    reader = csv.reader(csv_file)
-    # stores each column into array
-    columns_as_lists = [list(c) for c in zip(*reader)]
-    for i in range(size):
-        # print each column
-        print(columns_as_lists[i])  # All the values in the first column of your CSV
-# print total number of columns
-print("Total columns:", size)
-
 ##########[ Part 3 Functions]##########
+
+def uniqueVals(List):
+    return set(List)
 
 def count(fileName):
     #counts total rows & columns
@@ -101,6 +71,40 @@ def mode(number_list):
     return mode
 
 def maximum(number_list):
+    
+    
+##########[ Part 1 Data Loading]##########
+
+import csv
+
+#open csv file
+with open('InputDataSample.csv') as csv_file:
+    # creating an object of csv reader
+    # with the delimiter
+    csv_reader = csv.reader(csv_file, delimiter = ',')
+ 
+    # list to store the names of columns
+    column = []
+ 
+    # loop to iterate through the rows of csv
+    for row in csv_reader:
+ 
+        # adding first row
+        column.append(row)
+ 
+        # breaking the loop after the
+        # first iteration itself
+        break
+    # number of columns
+    size = int(len(column[0]))
+    reader = csv.reader(csv_file)
+    # stores each column into array
+    columns_as_lists = [list(c) for c in zip(*reader)]
+    for i in range(size):
+        # print each column
+        print(columns_as_lists[i])  # All the values in the first column of your CSV
+# print total number of columns
+print("Total columns:", size)
     return max(number_list)
 
 def minimum(number_list):
