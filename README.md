@@ -10,21 +10,23 @@ Tasks:
 - Sort any columns as selected by the user AIESHA
 - Print the first 100, 1000, or 5000 rows of the dataset as selected by the user AIESHA
 
+Part 1: AIESHA (DONE)
+Part 2: SPENCER (DONE)
 
-Part 3Functions:
-- Count SPENDER (DONE)
-- Unique SPENCER (DONE)
-- Mean HECTOR (DONE)
-- Median AIESHA/MOSTAFA (DONE)
-- Mode HECTOR (DONE)
-- Standard Deviation MOSTAFA (DONE)
-- Variance MOSTAFA (DONE)
-- Minimum HECTOR (DONE)
-- Maximum HECTOR (DONE)
-- 20 Percentile
-- 40 Percentile
-- 60 Percentile
-- 80 Percentile
+Part 3 Functions:
+- Count: SPENDER (DONE)
+- Unique: SPENCER (DONE)
+- Mean: HECTOR (DONE)
+- Median: AIESHA/MOSTAFA (DONE)
+- Mode: HECTOR (DONE)
+- Standard Deviation: MOSTAFA (DONE)
+- Variance: MOSTAFA (DONE)
+- Minimum: HECTOR (DONE)
+- Maximum: HECTOR (DONE)
+- 20 Percentile:
+- 40 Percentile:
+- 60 Percentile:
+- 80 Percentile:
 
 Analysis:
 - What was the month of the year in 2019 with most delays overall? 
