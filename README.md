@@ -3,7 +3,7 @@ Program to read, sort, and search data from csv files.
 
 
 Tasks:
-- Load the CSV file into array or data frame
+- Load the CSV file into array or data frame SPENCER
 - List all columns in dataset and offer user the possiblity to drop any of them
 - Count distinct values of any column selected by user
 - Search any value in any column as input by the user AIESHA
@@ -12,7 +12,7 @@ Tasks:
 
 
 Functions:
-- Count
+- Count SPENCER
 - Unique
 - Mean
 - Median AIESHA
