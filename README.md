@@ -12,7 +12,7 @@ Tasks:
 
 
 Functions:
-- Count SPENCER
+- Count SPENCER(DONE)
 - Unique
 - Mean
 - Median AIESHA
