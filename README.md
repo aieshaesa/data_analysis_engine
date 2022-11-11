@@ -12,7 +12,7 @@ Tasks:
 
 
 Part 3Functions:
-- Count SPENDER
+- Count SPENDER (DONE)
 - Unique SPENCER (DONE)
 - Mean HECTOR (DONE)
 - Median AIESHA/MOSTAFA (DONE)
