@@ -5,10 +5,10 @@ Program to read, sort, and search data from csv files.
 Tasks:
 - Load the CSV file into array or data frame SPENCER
 - List all columns in dataset and offer user the possiblity to drop any of them
-- Count distinct values of any column selected by user
-- Search any value in any column as input by the user AIESHA
-- Sort any columns as selected by the user AIESHA
-- Print the first 100, 1000, or 5000 rows of the dataset as selected by the user AIESHA
+- Count distinct values of any column selected by user: AIESHA
+- Search any value in any column as input by the user: AIESHA
+- Sort any columns as selected by the user: AIESHA
+- Print the first 100, 1000, or 5000 rows of the dataset as selected by the user: AIESHA
 
 Part 1: AIESHA (DONE)
 Part 2: SPENCER (DONE)
@@ -17,7 +17,7 @@ Part 3 Functions:
 - Count: SPENDER (DONE)
 - Unique: SPENCER (DONE)
 - Mean: HECTOR (DONE)
-- Median: AIESHA/MOSTAFA (DONE)
+- Median: MOSTAFA (DONE)
 - Mode: HECTOR (DONE)
 - Standard Deviation: MOSTAFA (DONE)
 - Variance: MOSTAFA (DONE)
