@@ -46,7 +46,7 @@ def median(number_list):
 # The list is auto-sorted.
 # List count must be at least 2.
 def percentile_20(number_list):
-    count = len(number_list)
+    count = count_list(number_list)
     sorted_list = sorted(number_list)
     
     # calculate the percentile, as the 'rank'.
@@ -58,5 +58,5 @@ def percentile_20(number_list):
     else:
         # if rank is a float, then get the value at that index as a integer, then add the rank's fracitional part to its whole part,
         # as the percentile.
-        rankIntAndFractional = divmod(rank, 1)
-        return rankIntAndFractional[0] + rankIntAndFractional[1]
+        rank_int_and_fractional = divmod(rank, 1)
+        return rank_int_and_fractional[0] + rank_int_and_fractional[1]
