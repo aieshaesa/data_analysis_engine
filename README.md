@@ -24,9 +24,9 @@ Part 3 Functions:
 - Minimum: HECTOR (DONE).               In main file? YES
 - Maximum: HECTOR (DONE).               In main file? YES
 - 20 Percentile: MOSTAFA (DONE).        In main file? NO
-- 40 Percentile:
-- 60 Percentile:
-- 80 Percentile:
+- 40 Percentile: MOSTAFA (DONE).
+- 60 Percentile: MOSTAFA (DONE).
+- 80 Percentile: MOSTAFA (DONE).
 
 Analysis:
 - What was the month of the year in 2019 with most delays overall? 
