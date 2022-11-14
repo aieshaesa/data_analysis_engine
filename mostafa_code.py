@@ -41,3 +41,22 @@ def median(number_list):
     median_of_middle_numbers = mean([lower_middle_num, upper_middle_num])
 
     return median_of_middle_numbers
+
+# Returns a value from the sorted number list at the 20th percentile.
+# The list is auto-sorted.
+# List count must be at least 2.
+def percentile_20(number_list):
+    count = len(number_list)
+    sorted_list = sorted(number_list)
+    
+    # calculate the percentile, as the 'rank'.
+    rank = (0.20 * (count - 1)) + 1
+    
+    # if rank is an integer, then use the rank as an index and get the value at that index.
+    if rank.is_integer():
+        return sorted_list[math.floor(rank) - 1]
+    else:
+        # if rank is a float, then get the value at that index as a integer, then add the rank's fracitional part to its whole part,
+        # as the percentile.
+        rankIntAndFractional = divmod(rank, 1)
+        return rankIntAndFractional[0] + rankIntAndFractional[1]
