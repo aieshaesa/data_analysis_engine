@@ -23,7 +23,7 @@ Part 3 Functions:
 - Variance: MOSTAFA (DONE).             In main file? YES
 - Minimum: HECTOR (DONE).               In main file? YES
 - Maximum: HECTOR (DONE).               In main file? YES
-- 20 Percentile: MOSTAFA (DONE).        In main file? NO.
+- 20 Percentile: MOSTAFA (DONE).        In main file? NO
 - 40 Percentile:
 - 60 Percentile:
 - 80 Percentile:

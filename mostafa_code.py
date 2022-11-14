@@ -56,7 +56,7 @@ def percentile_20(number_list):
     if rank.is_integer():
         return sorted_list[math.floor(rank) - 1]
     else:
-        # if rank is a float, then get the value at that index as a integer, then add the rank's fracitional part to its whole part,
-        # as the percentile.
-        rank_int_and_fractional = divmod(rank, 1)
-        return rank_int_and_fractional[0] + rank_int_and_fractional[1]
+        # if rank is a float, then get the value at that index as a integer, then add the rank's 
+        # part to its whole part, as the percentile. 
+        # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
+        return sorted_list[math.floor(rank) - 1]
