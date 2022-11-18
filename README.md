@@ -15,7 +15,7 @@ Part 2: SPENCER (DONE)
 
 Part 3 Functions:
 - Count: SPENCER (DONE).                In main file? YES
-- Unique: SPENCER (DONE).               In main file? NO
+- Unique: SPENCER (DONE).               In main file? YES
 - Mean: HECTOR (DONE).                  In main file? YES
 - Median: MOSTAFA (DONE)                In main file? YES
 - Mode: HECTOR (DONE).                  In main file? YES
