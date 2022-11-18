@@ -15,6 +15,10 @@ import math # use the math library
 
 ##########[ Part 3 Functions ##########
 
+# Returns unique values in list
+def Unique(List):
+    return set(List)
+
 # Returns the count of whatever List is passed in.
 def count_list(number_list):
     return len(number_list)
