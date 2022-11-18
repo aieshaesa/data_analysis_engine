@@ -109,6 +109,82 @@ def median(number_list):
 
     return median_of_middle_numbers
 
+# Returns a value from the sorted number list at the 20th percentile.
+# The list is auto-sorted.
+# List count must be at least 2.
+def percentile_20(number_list):
+    count = count_list(number_list)
+    sorted_list = sorted(number_list)
+    
+    # calculate the percentile, as the 'rank'.
+    rank = (0.20 * (count - 1)) + 1
+    
+    # if rank is an integer, then use the rank as an index and get the value at that index.
+    if rank.is_integer():
+        return sorted_list[math.floor(rank) - 1]
+    else:
+        # if rank is a float, then get the value at that index as a integer, then add the rank's 
+        # part to its whole part, as the percentile. 
+        # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
+        return sorted_list[math.floor(rank) - 1]
+
+# Returns a value from the sorted number list at the 40th percentile.
+# The list is auto-sorted.
+# List count must be at least 2.
+def percentile_40(number_list):
+    count = count_list(number_list)
+    sorted_list = sorted(number_list)
+    
+    # calculate the percentile, as the 'rank'.
+    rank = (0.40 * (count - 1)) + 1
+    
+    # if rank is an integer, then use the rank as an index and get the value at that index.
+    if rank.is_integer():
+        return sorted_list[math.floor(rank) - 1]
+    else:
+        # if rank is a float, then get the value at that index as a integer, then add the rank's 
+        # part to its whole part, as the percentile. 
+        # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
+        return sorted_list[math.floor(rank) - 1]
+
+# Returns a value from the sorted number list at the 60th percentile.
+# The list is auto-sorted.
+# List count must be at least 2.
+def percentile_60(number_list):
+    count = count_list(number_list)
+    sorted_list = sorted(number_list)
+    
+    # calculate the percentile, as the 'rank'.
+    rank = (0.60 * (count - 1)) + 1
+    
+    # if rank is an integer, then use the rank as an index and get the value at that index.
+    if rank.is_integer():
+        return sorted_list[math.floor(rank) - 1]
+    else:
+        # if rank is a float, then get the value at that index as a integer, then add the rank's 
+        # part to its whole part, as the percentile. 
+        # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
+        return sorted_list[math.floor(rank) - 1]
+
+# Returns a value from the sorted number list at the 80th percentile.
+# The list is auto-sorted.
+# List count must be at least 2.
+def percentile_80(number_list):
+    count = count_list(number_list)
+    sorted_list = sorted(number_list)
+    
+    # calculate the percentile, as the 'rank'.
+    rank = (0.80 * (count - 1)) + 1
+    
+    # if rank is an integer, then use the rank as an index and get the value at that index.
+    if rank.is_integer():
+        return sorted_list[math.floor(rank) - 1]
+    else:
+        # if rank is a float, then get the value at that index as a integer, then add the rank's 
+        # part to its whole part, as the percentile. 
+        # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
+        return sorted_list[math.floor(rank) - 1]
+
 ##########[ Part 1 Data Loading ]##########
 
 # open csv file
@@ -116,13 +192,12 @@ with open('InputDataSample.csv') as csv_file:
     # creating an object of csv reader
     # with the delimiter
     csv_reader = csv.reader(csv_file, delimiter = ',')
- 
+
     # list to store the names of columns
     column = []
  
     # loop to iterate through the rows of csv
     for row in csv_reader:
- 
         # adding first row
         column.append(row)
  
@@ -134,6 +209,7 @@ with open('InputDataSample.csv') as csv_file:
     reader = csv.reader(csv_file)
     # stores each column into array
     columns_as_lists = [list(c) for c in zip(*reader)]
+
     for i in range(size):
         # print each column
         print(columns_as_lists[i])  # All the values in the first column of your CSV

@@ -44,3 +44,13 @@ def maximum(number_list):
 # Returns the minimum number of the passed list of numbers.
 def minimum(number_list):
     return min(number_list)
+
+
+MONTH_COL = 0
+DAY_OF_WEEK_COL = 1
+NUMBER_OF_SEATS_COL = 7
+
+columns = [ [1, 3, 8], [6, 0, 5], ... ]
+
+month_column = columns[MONTH_COL]
+day_of_week_column = columns[DAY_OF_WEEK_COL]
