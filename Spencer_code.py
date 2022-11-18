@@ -1,3 +1,4 @@
+
 #####################################################################
 # CRSE: CMPS3500
 # ASGT: Class Project
@@ -14,6 +15,14 @@ import csv # use the CSV library
 import math # use the math library
 
 ##########[ Part 3 Functions ##########
+
+# sort list
+def Sort(List, choice):
+    if choice == 1:
+        List.sort()
+    elif choice == 2:
+        List.sort(reverse=True)
+    return List
 
 # Returns unique values in list
 def Unique(List):
@@ -151,11 +160,23 @@ print("Total columns:", size)
 for i in range(size):
     print(i,":",columns_as_lists[i][0])
 print("\n")
+# Return distinct values of columns and total count of distinct values
 dist = input("Choose a column to get it's distinct values: ")
 for i in range(size):
     if dist == columns_as_lists[i][0] or int(dist) == i:
         print("The distinct values of ", columns_as_lists[i][0], " are ", Unique(columns_as_lists[i][1:]))
-        
+        print("Distinct value total:", len(Unique(columns_as_lists[i][1:])))
+# Search for value in each list
+value = input("Search for value: ")
+print("Value found in column:")
+for i in range(size):
+    if value in columns_as_lists[i]:
+        print(i)
+
+
+
+
+
 
 
 
