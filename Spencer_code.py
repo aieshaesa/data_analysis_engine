@@ -15,10 +15,9 @@ import math # use the math library
 
 ##########[ Part 3 Functions ##########
 
-# Returns unique values
+# Returns unique values in list
 def Unique(List):
     return set(List)
-
 
 # Returns the count of whatever List is passed in.
 def count_list(number_list):
@@ -113,9 +112,10 @@ def median(number_list):
     return median_of_middle_numbers
 
 ##########[ Part 1 Data Loading ]##########
-
+#file = 'InputDataSample.csv'
+file = 'input.csv'
 #open csv file
-with open('InputDataSample.csv') as csv_file:
+with open(file) as csv_file:
     # creating an object of csv reader
     # with the delimiter
     csv_reader = csv.reader(csv_file, delimiter = ',')
@@ -132,18 +132,33 @@ with open('InputDataSample.csv') as csv_file:
         # breaking the loop after the
         # first iteration itself
         break
-    # number of columns
-    size = int(len(column[0]))
-    reader = csv.reader(csv_file)
-    # stores each column into array
-    columns_as_lists = [list(c) for c in zip(*reader)]
-    #for i in range(size):
-        # print each column
-        #print(columns_as_lists[i])  # All the values in the first column of your CSV
+csv_file.close()
+with open(file) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter = ',')
+        
+        # number of columns
+        size = int(len(column[0]))
+        reader = csv.reader(csv_file)
+        # stores each column into array
+        columns_as_lists = [list(c) for c in zip(*reader)]
+for i in range(size):
+    # print each column
+    print(columns_as_lists[i])  # All the values in the first column of your CSV
         
 # print total number of columns
 print("Total columns:", size)
-print("List:", columns_as_lists[0])
 
-print("\n\nUnique list:", Unique(columns_as_lists[0]))
+for i in range(size):
+    print(i,":",columns_as_lists[i][0])
+print("\n")
+dist = input("Choose a column to get it's distinct values: ")
+for i in range(size):
+    if dist == columns_as_lists[i][0] or int(dist) == i:
+        print("The distinct values of ", columns_as_lists[i][0], " are ", Unique(columns_as_lists[i][1:]))
+        
+
+
+
+
+
 
