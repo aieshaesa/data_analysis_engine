@@ -109,9 +109,9 @@ def median(number_list):
 
     return median_of_middle_numbers
 
-# Returns a value from the sorted number list at the 20th percentile.
-# The list is auto-sorted.
-# List count must be at least 2.
+# These functions return a value from the sorted number list at the 20th, 40th,
+# 50th, 60th and 80th percentiles.
+# The list is auto-sorted for all these functions.
 def percentile_20(number_list):
     count = count_list(number_list)
     sorted_list = sorted(number_list)
@@ -128,61 +128,48 @@ def percentile_20(number_list):
         # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
         return sorted_list[math.floor(rank) - 1]
 
-# Returns a value from the sorted number list at the 40th percentile.
-# The list is auto-sorted.
-# List count must be at least 2.
 def percentile_40(number_list):
     count = count_list(number_list)
     sorted_list = sorted(number_list)
     
-    # calculate the percentile, as the 'rank'.
     rank = (0.40 * (count - 1)) + 1
     
-    # if rank is an integer, then use the rank as an index and get the value at that index.
     if rank.is_integer():
         return sorted_list[math.floor(rank) - 1]
     else:
-        # if rank is a float, then get the value at that index as a integer, then add the rank's 
-        # part to its whole part, as the percentile. 
-        # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
         return sorted_list[math.floor(rank) - 1]
 
-# Returns a value from the sorted number list at the 60th percentile.
-# The list is auto-sorted.
-# List count must be at least 2.
+def percentile_50(number_list):
+    count = count_list(number_list)
+    sorted_list = sorted(number_list)
+    
+    rank = (0.50 * (count - 1)) + 1
+    
+    if rank.is_integer():
+        return sorted_list[math.floor(rank) - 1]
+    else:
+        return sorted_list[math.floor(rank) - 1]
+
 def percentile_60(number_list):
     count = count_list(number_list)
     sorted_list = sorted(number_list)
     
-    # calculate the percentile, as the 'rank'.
     rank = (0.60 * (count - 1)) + 1
     
-    # if rank is an integer, then use the rank as an index and get the value at that index.
     if rank.is_integer():
         return sorted_list[math.floor(rank) - 1]
     else:
-        # if rank is a float, then get the value at that index as a integer, then add the rank's 
-        # part to its whole part, as the percentile. 
-        # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
         return sorted_list[math.floor(rank) - 1]
 
-# Returns a value from the sorted number list at the 80th percentile.
-# The list is auto-sorted.
-# List count must be at least 2.
 def percentile_80(number_list):
     count = count_list(number_list)
     sorted_list = sorted(number_list)
     
-    # calculate the percentile, as the 'rank'.
     rank = (0.80 * (count - 1)) + 1
-    
-    # if rank is an integer, then use the rank as an index and get the value at that index.
+
     if rank.is_integer():
         return sorted_list[math.floor(rank) - 1]
     else:
-        # if rank is a float, then get the value at that index as a integer, then add the rank's 
-        # part to its whole part, as the percentile. 
-        # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
         return sorted_list[math.floor(rank) - 1]
 
 ##########[ Part 1 Data Loading ]##########
