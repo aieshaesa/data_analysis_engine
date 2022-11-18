@@ -10,14 +10,14 @@
 # DESCRIPTION: Implementation Basic Data Analysis Routines
 #####################################################################
 
-import csv # use the CSV library
-import math # use the math library
+import csv
+import math
 
-##########[ Part 3 Functions ##########
+##########[ Part 3 Functions ]##########
 
 # Returns unique values in list
-def Unique(List):
-    return set(List)
+def unique(number_list):
+    return set(number_list)
 
 # Returns the count of whatever List is passed in.
 def count_list(number_list):
@@ -34,7 +34,7 @@ def mean(number_list):
 # it will record a total of same numbers iterated over in the list, until it hits a new number,
 # where the total resets to 1 again. The last number that has more occurrences of itself is returned.
 def mode(number_list):
-    sorted_list = sorted(number_list) # list must be sorted in ascending order. Auto-sort the list.
+    sorted_list = sorted(number_list)
     last_num = sorted_list[0]
     last_num_occurrences = 0
     current_num_occurrences = 0
@@ -43,7 +43,6 @@ def mode(number_list):
 
     for num in sorted_list:
         if last_num == num:
-            # increment this number's occurence as long as we keep iterating over the same number
             current_num_occurrences += 1
         
         # if this number's occurrences passes the previous number's occurrences, make this number the new mode.
@@ -56,7 +55,6 @@ def mode(number_list):
         if last_num != num:
             current_num_occurrences = 1
         
-        # set the previous iterated item to this (current) one.
         last_num = num
 
     return mode
@@ -96,7 +94,7 @@ def median(number_list):
     count = count_list(number_list)
     sorted_list = sorted(number_list)
 
-    # get index of middle number.
+    # index cannot be float numbers, so index is rounded down.
     middleIndex = math.floor(count / 2)
 
     # scenario 1: if the count is odd, return the middle-most number.
@@ -113,7 +111,7 @@ def median(number_list):
 
 ##########[ Part 1 Data Loading ]##########
 
-#open csv file
+# open csv file
 with open('InputDataSample.csv') as csv_file:
     # creating an object of csv reader
     # with the delimiter
