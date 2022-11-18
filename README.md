@@ -23,10 +23,10 @@ Part 3 Functions:
 - Variance: MOSTAFA (DONE).             In main file? YES
 - Minimum: HECTOR (DONE).               In main file? YES
 - Maximum: HECTOR (DONE).               In main file? YES
-- 20 Percentile: MOSTAFA (DONE).        In main file? NO
-- 40 Percentile: MOSTAFA (DONE).
-- 60 Percentile: MOSTAFA (DONE).
-- 80 Percentile: MOSTAFA (DONE).
+- 20 Percentile: MOSTAFA (DONE).        In main file? YES
+- 40 Percentile: MOSTAFA (DONE).        In main file? YES
+- 60 Percentile: MOSTAFA (DONE).        In main file? YES
+- 80 Percentile: MOSTAFA (DONE).        In main file? YES
 
 Analysis:
 - What was the month of the year in 2019 with most delays overall? 
