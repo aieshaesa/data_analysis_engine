@@ -14,19 +14,20 @@ Part 1: AIESHA (DONE)
 Part 2: SPENCER (DONE)
 
 Part 3 Functions:
-- Count: SPENCER (DONE).                In main file? YES
-- Unique: SPENCER (DONE).               In main file? YES
-- Mean: HECTOR (DONE).                  In main file? YES
-- Median: MOSTAFA (DONE)                In main file? YES
-- Mode: HECTOR (DONE).                  In main file? YES
-- Standard Deviation: MOSTAFA (DONE).   In main file? YES
-- Variance: MOSTAFA (DONE).             In main file? YES
-- Minimum: HECTOR (DONE).               In main file? YES
-- Maximum: HECTOR (DONE).               In main file? YES
-- 20 Percentile: MOSTAFA (DONE).        In main file? YES
-- 40 Percentile: MOSTAFA (DONE).        In main file? YES
-- 60 Percentile: MOSTAFA (DONE).        In main file? YES
-- 80 Percentile: MOSTAFA (DONE).        In main file? YES
+- Count: SPENCER (DONE)
+- Unique: SPENCER (DONE)
+- Mean: HECTOR (DONE)
+- Median: MOSTAFA (DONE)
+- Mode: HECTOR (DONE)
+- Standard Deviation: MOSTAFA (DONE)
+- Variance: MOSTAFA (DONE)
+- Minimum: HECTOR (DONE)
+- Maximum: HECTOR (DONE)
+- 20 Percentile: MOSTAFA (DONE)
+- 40 Percentile: MOSTAFA (DONE)
+- 50 Percentile: MOSTAFA (DONE)
+- 60 Percentile: MOSTAFA (DONE)
+- 80 Percentile: MOSTAFA (DONE)
 
 Analysis:
 - What was the month of the year in 2019 with most delays overall? 
