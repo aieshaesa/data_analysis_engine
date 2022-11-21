@@ -4,9 +4,9 @@ Program to read, sort, and search data from csv files.
 
 Tasks:
 - Load the CSV file into array or data frame SPENCER
-- List all columns in dataset and offer user the possiblity to drop any of them: AIESHA
-- Count distinct values of any column selected by user: AIESHA
-- Search any value in any column as input by the user: AIESHA
+- List all columns in dataset and offer user the possiblity to drop any of them: AIESHA (DONE)
+- Count distinct values of any column selected by user: AIESHA (DONE)
+- Search any value in any column as input by the user: AIESHA 
 - Sort any columns as selected by the user: AIESHA
 - Print the first 100, 1000, or 5000 rows of the dataset as selected by the user: AIESHA
 
