@@ -160,7 +160,7 @@ print("Total columns:", size)
 for i in range(size):
     print(i,":",columns_as_lists[i][0])
 print("\n")
-##################### Ascending sorted list ################################
+##################### Ascending and Descending sorted list #################
 for i in range(size):
     print(i,":",columns_as_lists[i][0])
 print("\n")
@@ -168,11 +168,16 @@ num = input("choice: ")
 for i in range(size):
     if num == columns_as_lists[i][0] or int(num) == i:
         List = columns_as_lists[i][1:]
-
+sortChoice = input("Sort in (1) ascending or (2) descending order: ")
+sort = False
+if sortChoice == '1':
+    sort = False
+elif sortChoice == '2':
+    sort = True
 if List[1].isnumeric():
-    List.sort(key = int)
+    List.sort(key = int, reverse = sort)
 else:
-    List.sort(key = str)
+    List.sort(key = str, reverse = sort)
 
 print(List)
 ############################################################################
