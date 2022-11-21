@@ -1,4 +1,3 @@
-
 #####################################################################
 # CRSE: CMPS3500
 # ASGT: Class Project
@@ -123,6 +122,8 @@ def median(number_list):
 ##########[ Part 1 Data Loading ]##########
 #file = 'InputDataSample.csv'
 file = 'input.csv'
+
+'''
 #open csv file
 with open(file) as csv_file:
     # creating an object of csv reader
@@ -150,6 +151,9 @@ with open(file) as csv_file:
         reader = csv.reader(csv_file)
         # stores each column into array
         columns_as_lists = [list(c) for c in zip(*reader)]
+csv_file.close
+'''
+'''
 for i in range(size):
     # print each column
     print(columns_as_lists[i])  # All the values in the first column of your CSV
@@ -158,9 +162,11 @@ for i in range(size):
 print("Total columns:", size)
 
 #count_list(columns_as_lists)
+'''
 
 
 
+'''
 ##################### Ascending and Descending sorted list #################
 for i in range(size):
     print(i,":",columns_as_lists[i][0])
@@ -182,9 +188,15 @@ else:
 
 print(List)
 ############################################################################
+'''
 
-
-
+#################### read certain number of rows ##############################
+N = input("Enter number of rows to display: ")
+with open(file, "r") as file:
+    for i in range(int(N)):
+        line = next(file).strip()
+        print(line)
+###############################################################################
 
 
 
