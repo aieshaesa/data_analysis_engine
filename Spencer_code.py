@@ -16,21 +16,21 @@ import math # use the math library
 
 ##########[ Part 3 Functions ##########
 
-# sort list
-def Sort(List, choice):
-    if choice == 1:
-        List.sort()
-    elif choice == 2:
-        List.sort(reverse=True)
-    return List
-
 # Returns unique values in list
 def Unique(List):
     return set(List)
 
 # Returns the count of whatever List is passed in.
-def count_list(number_list):
-    return len(number_list)
+def count_list(columns_as_lists):
+    for i in range(size):
+        print(i,":",columns_as_lists[i][0])
+    print("\n")
+    dist = input("Choose a column to get it's distinct values: ")
+    for i in range(size):
+        if dist == columns_as_lists[i][0] or int(dist) == i:
+            print("The distinct values of ", columns_as_lists[i][0], " are ", Unique(columns_as_lists[i][1:]))
+            print("Total:", len(Unique(columns_as_lists[i][1:])))
+        #return len(number_list)
 
 # Returns the mean/average of the passed list of numbers.
 def mean(number_list):
@@ -157,9 +157,10 @@ for i in range(size):
 # print total number of columns
 print("Total columns:", size)
 
-for i in range(size):
-    print(i,":",columns_as_lists[i][0])
-print("\n")
+#count_list(columns_as_lists)
+
+
+
 ##################### Ascending and Descending sorted list #################
 for i in range(size):
     print(i,":",columns_as_lists[i][0])
@@ -183,20 +184,6 @@ print(List)
 ############################################################################
 
 
-'''
-# Return distinct values of columns and total count of distinct values
-dist = input("Choose a column to get it's distinct values: ")
-for i in range(size):
-    if dist == columns_as_lists[i][0] or int(dist) == i:
-        print("The distinct values of ", columns_as_lists[i][0], " are ", Unique(columns_as_lists[i][1:]))
-        print("Distinct value total:", len(Unique(columns_as_lists[i][1:])))
-# Search for value in each list
-value = input("Search for value: ")
-print("Value found in column:")
-for i in range(size):
-    if value in columns_as_lists[i]:
-        print(i)
-'''
 
 
 
