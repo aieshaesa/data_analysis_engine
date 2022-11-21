@@ -105,7 +105,7 @@ class Airport:
         valid = False
         options = ['Drop a Column', 'Count Distinct Value', 'Search for a Value', 'Sort a Column', 'Mean of a Column', 
             'Median of a Column', 'Mode of a Column', 'Standard Deviation', 'Variance', 'Minimum', 'Maximum',
-            '20 Percentile', '40 Percentile', '50 Percentile', '60 Percentile', '80 Percentile' ]
+            '20 Percentile', '40 Percentile', '50 Percentile', '60 Percentile', '80 Percentile', 'Print Rows']
     
         for i in range(len(options)):
             print(num+1, ':', options[i])
@@ -121,7 +121,12 @@ class Airport:
             else:
                 valid = True
 
-        choice = self.choose_column()
+        
+        choice = None
+        
+        # if we are just printing rows, don't list the columns
+        if ans != 16:
+            choice = self.choose_column()
         
         if ans == 0:
             self.drop_column(choice)
@@ -155,6 +160,8 @@ class Airport:
             self.percentile_60(choice)
         elif ans == 15:
             self.percentile_80(choice)
+        elif ans == 16:
+            self.print_rows(choice)
     
     def search_value(self, column_choice):
         column_chosen = self.columns_as_lists[column_choice]
@@ -211,7 +218,7 @@ class Airport:
                 column_chosen[1:] = copy_of_column_chosen
 
                 print("Column '" + column_chosen[0] + "' sorted in ascending order.")
-                
+
             # descending order
             elif sort_order == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = str)
@@ -582,6 +589,14 @@ class Airport:
         
         print('The 80th percentile of the column', self.columns_as_lists[number][0], 'is:', percentile)
 
+    def print_rows(self, choice):
+        N = input("Enter number of rows to display: ")
+        file = "Airline_Delays_500_Lines.csv"
+
+        with open(file, "r") as file:
+            for i in range(int(N)):
+                line = next(file).strip()
+                print(line)
 
 # Main Code
 file = 'Airline_Delays_500_Lines.csv'
