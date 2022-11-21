@@ -20,8 +20,16 @@ def Unique(List):
     return set(List)
 
 # Returns the count of whatever List is passed in.
-def count_list(number_list):
-    return len(number_list)
+def count_list(columns_as_lists):
+    for i in range(size):
+        print(i,":",columns_as_lists[i][0])
+    print("\n")
+    dist = input("Choose a column to get it's distinct values: ")
+    for i in range(size):
+        if dist == columns_as_lists[i][0] or int(dist) == i:
+            print("The distinct values of ", columns_as_lists[i][0], " are ", Unique(columns_as_lists[i][1:]))
+            print("Total:", len(Unique(columns_as_lists[i][1:])))
+        #return len(number_list)
 
 # Returns the mean/average of the passed list of numbers.
 def mean(number_list):
@@ -114,6 +122,8 @@ def median(number_list):
 ##########[ Part 1 Data Loading ]##########
 #file = 'InputDataSample.csv'
 file = 'input.csv'
+
+'''
 #open csv file
 with open(file) as csv_file:
     # creating an object of csv reader
@@ -141,6 +151,9 @@ with open(file) as csv_file:
         reader = csv.reader(csv_file)
         # stores each column into array
         columns_as_lists = [list(c) for c in zip(*reader)]
+csv_file.close
+'''
+'''
 for i in range(size):
     # print each column
     print(columns_as_lists[i])  # All the values in the first column of your CSV
@@ -148,15 +161,42 @@ for i in range(size):
 # print total number of columns
 print("Total columns:", size)
 
+#count_list(columns_as_lists)
+'''
+
+
+
+'''
+##################### Ascending and Descending sorted list #################
 for i in range(size):
     print(i,":",columns_as_lists[i][0])
 print("\n")
-dist = input("Choose a column to get it's distinct values: ")
+num = input("choice: ")
 for i in range(size):
-    if dist == columns_as_lists[i][0] or int(dist) == i:
-        print("The distinct values of ", columns_as_lists[i][0], " are ", Unique(columns_as_lists[i][1:]))
-        print("Total:", len(Unique(columns_as_lists[i][1:])))
-        
+    if num == columns_as_lists[i][0] or int(num) == i:
+        List = columns_as_lists[i][1:]
+sortChoice = input("Sort in (1) ascending or (2) descending order: ")
+sort = False
+if sortChoice == '1':
+    sort = False
+elif sortChoice == '2':
+    sort = True
+if List[1].isnumeric():
+    List.sort(key = int, reverse = sort)
+else:
+    List.sort(key = str, reverse = sort)
+
+print(List)
+############################################################################
+'''
+
+#################### read certain number of rows ##############################
+N = input("Enter number of rows to display: ")
+with open(file, "r") as file:
+    for i in range(int(N)):
+        line = next(file).strip()
+        print(line)
+###############################################################################
 
 
 
