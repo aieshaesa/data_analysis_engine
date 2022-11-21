@@ -77,7 +77,23 @@ class Airport:
                 for j in range(len(self.columns_as_lists[i])):
                     print(self.columns_as_lists[i][j])
         """
-        
+
+    def column_is_numerical(self, column_choice):
+        column_to_see = self.columns_as_lists[column_choice]
+        result = False
+
+        if column_to_see[1].isdigit() or column_to_see[1].isnumeric():
+            result = True
+
+        # if it errors converting the string to number, then column isn't a numeric column.
+        try:
+            float(column_to_see[1])
+            result = True
+        except:
+            result = False
+
+        return result      
+
     def print_column_names(self):
         for i in range(self.size):
             print(i+1,":", self.columns_as_lists[i][0])
@@ -104,13 +120,17 @@ class Airport:
                 print('Number given isn\'t valid, please try again')
             else:
                 valid = True
-        
+
         choice = self.choose_column()
         
         if ans == 0:
             self.drop_column(choice)
         elif ans == 1:
             self.count_distinct_value(choice)
+        elif ans == 2:
+            self.search_value(choice)
+        elif ans == 3:
+            self.sort_column(choice)
         elif ans == 4:
             self.mean(choice, True)
         elif ans == 5:
@@ -135,13 +155,70 @@ class Airport:
             self.percentile_60(choice)
         elif ans == 15:
             self.percentile_80(choice)
-        """
-        elif ans == 2:
-            self.search_value(choice)
-        elif ans == 3:
-            self.sort_column(choice)
+    
+    def search_value(self, column_choice):
+        column_chosen = self.columns_as_lists[column_choice]
+        count = len(column_chosen)
+        
+        valid = False
 
-        """
+        while valid == False:
+            ans = int(input("Choose a row number (1 - " + str(count) + ") in column '" + column_chosen[0] + "':"))
+            
+            if ans < 1 or ans > count:
+                print('Number given isn\'t valid, please try again')
+            else:
+                valid = True
+
+                if ans == count:
+                    print("Value at row", ans, "in column '" + column_chosen[0] + "' is", column_chosen[ans - 1])
+                    ans -= 1
+                else:
+                    print("Value at row", ans, "in column '" + column_chosen[0] + "' is", column_chosen[ans])
+
+    def sort_column(self, column_choice):
+        column_chosen = self.columns_as_lists[column_choice]
+        copy_of_column_chosen = column_chosen[1:]
+
+        valid = False
+
+        while valid == False:
+            sort_order = input("Which sort order use? (asc/desc)")
+
+            if sort_order != "asc" and sort_order != "desc":
+                print("Option given isn\'t valid, please try again")
+            else:
+                valid = True
+
+        if self.column_is_numerical(column_choice):
+            # ascending order
+            if sort_order == "asc":
+                copy_of_column_chosen.sort(key = float)
+                column_chosen[1:] = copy_of_column_chosen
+
+                print("Column '" + column_chosen[0] + "' sorted in ascending order.")
+
+            # descending order
+            elif sort_order == "desc":
+                copy_of_column_chosen.sort(reverse = True, key = float)
+                column_chosen[1:] = copy_of_column_chosen
+
+                print("Column '" + column_chosen[0] + "' sorted in descending order.")
+        else:
+            # ascending order
+            if sort_order == "asc":
+                copy_of_column_chosen.sort(key = str)
+                column_chosen[1:] = copy_of_column_chosen
+
+                print("Column '" + column_chosen[0] + "' sorted in ascending order.")
+                
+            # descending order
+            elif sort_order == "desc":
+                copy_of_column_chosen.sort(reverse = True, key = str)
+                column_chosen[1:] = copy_of_column_chosen
+
+                print("Column '" + column_chosen[0] + "' sorted in descending order.")
+            
 
     def unique(self, column):
         return set(column)
