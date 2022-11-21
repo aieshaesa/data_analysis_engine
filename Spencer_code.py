@@ -160,6 +160,25 @@ print("Total columns:", size)
 for i in range(size):
     print(i,":",columns_as_lists[i][0])
 print("\n")
+##################### Ascending sorted list ################################
+for i in range(size):
+    print(i,":",columns_as_lists[i][0])
+print("\n")
+num = input("choice: ")
+for i in range(size):
+    if num == columns_as_lists[i][0] or int(num) == i:
+        List = columns_as_lists[i][1:]
+
+if List[1].isnumeric():
+    List.sort(key = int)
+else:
+    List.sort(key = str)
+
+print(List)
+############################################################################
+
+
+'''
 # Return distinct values of columns and total count of distinct values
 dist = input("Choose a column to get it's distinct values: ")
 for i in range(size):
@@ -172,7 +191,7 @@ print("Value found in column:")
 for i in range(size):
     if value in columns_as_lists[i]:
         print(i)
-
+'''
 
 
 
