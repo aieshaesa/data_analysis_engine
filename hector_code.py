@@ -76,22 +76,178 @@ class Airport:
                 
         self.remove_punctuation()
 
+    # prints the menu to the terminal that servers as the main interface to the user.
+    # all the options listed are the ones that are valid to choose from.
+    # not all actions can be made towards particular columns, so exceptions must be raised to prevent errors.
+    def menu(self):
+        valid = False
+        options = ['Drop a Column', 'Count Distinct Value', 'Search for a Value', 'Sort a Column', 'Mean of a Column', 
+            'Median of a Column', 'Mode of a Column', 'Standard Deviation', 'Variance', 'Minimum', 'Maximum',
+            '20 Percentile', '40 Percentile', '50 Percentile', '60 Percentile', '80 Percentile', 'Print Rows', 'Analysis']
+
+        options_length = len(options)
+
+        for i in range(options_length):
+            print(i+1, ':', options[i])
+
+        while(valid == False):
+            ans = int(input('What would you like to do? (1 - '+ str(options_length) +'): '))
+
+            if ans < 1 or ans > options_length:
+                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
+            else:
+                valid = True
+        
+        ans -= 1
+
+        ##############################[ User Actions ]##############################
+
+        column_number = None
+        
+        # if we are dropping columns, printing rows, or showing 
+        # the analysis don't list the columns.
+        if ans != 0 and ans != 16 and ans != 17:
+            column_number = self.choose_column()
+        
+            chosen_column_list = self.list_for_chosen_column(column_number)
+            chosen_column_header = self.columns_as_lists[column_number][0]
+            
+            chosen_column_length = len(chosen_column_list)
+
+        try:
+            if ans == 0:
+                if self.size <= 1:
+                    raise Exception("At least 1 column must remain in the dataset.")
+                
+                option = -1;
+                self.print_column_names()
+
+                while option < 1 or option > self.size:
+                    option = int(input("Enter a column to drop (1 - "+ str(self.size) +"): "))
+
+                column_dropped_header = self.columns_as_lists[option - 1][0]
+                self.drop_column(option)
+
+                print(MAKE_GREEN, 'Column', column_dropped_header, 'was dropped.', RESET)
+
+            elif ans == 1:
+                chosen_column_refined = self.list_for_chosen_column(column_number)
+                unique_list = self.unique(chosen_column_refined)
+                index = 0
+                option = -1
+
+                for value in unique_list:
+                    index += 1
+                    print(index, ":", value)
+                
+                while option < 1 or option > index:
+                    option = int(input("Which value would you like to count? (1 - "+ str(index) +"): "))
+                
+                distinct_value, count = self.count_distinct_value(column_number, unique_list[option - 1])
+                print(MAKE_GREEN, 'The amount of times', distinct_value, 'is in the data is', count, 'time(s).', RESET)
+
+            elif ans == 2:
+                user_input = -1
+
+                while user_input < 1 or user_input > chosen_column_length:
+                    user_input = int(input("Which row would you like to pick? (1 - "+ str(chosen_column_length) +"): "))
+
+                chosen_column_refined = self.list_for_chosen_column(column_number)
+                val = self.search_value(chosen_column_refined, user_input - 1)
+
+                print(MAKE_GREEN, "The value at row", str(user_input), "of column", chosen_column_header, "is", str(val), RESET)
+
+            elif ans == 3:
+                self.sort_column(column_number)
+
+            elif ans == 4:
+                result_mean = self.mean(chosen_column_list)
+                print(MAKE_GREEN, "The mean of the column", chosen_column_header, "is", result_mean, RESET)
+
+            elif ans == 5:
+                result_median = self.median(chosen_column_list)
+                print(MAKE_GREEN, 'The median of the column', chosen_column_header, 'is:', result_median, RESET)
+
+            elif ans == 6:
+                result_mode = self.mode(chosen_column_list)
+                print(MAKE_GREEN, 'The mode of the column', chosen_column_header, 'is:', result_mode, RESET)
+
+            elif ans == 7:
+                result_sd = self.standard_deviation(chosen_column_list)
+                print(MAKE_GREEN, 'The standard deviation of the column', chosen_column_header, 'is:', result_sd, RESET)
+
+            elif ans == 8:
+                result_variance = self.variance(chosen_column_list)
+                print(MAKE_GREEN, 'The variance of the column', chosen_column_header, 'is:', result_variance, RESET)
+
+            elif ans == 9:
+                result_min = self.minimum(chosen_column_list)
+                print(MAKE_GREEN, "The minimum value of the column", chosen_column_header, "is", result_min, RESET)
+
+            elif ans == 10:
+                result_max = self.maximum(chosen_column_list)
+                print(MAKE_GREEN, "The maximum value of the column", chosen_column_header, "is", result_max, RESET)
+
+            elif ans == 11:
+                result_per20 = self.percentile_20(chosen_column_list)
+                print(MAKE_GREEN, "The 20th percentile value of the column", chosen_column_header, "is", result_per20, RESET)
+
+            elif ans == 12:
+                result_per40 = self.percentile_40(chosen_column_list)
+                print(MAKE_GREEN, "The 40th percentile value of the column", chosen_column_header, "is", result_per40, RESET)
+
+            elif ans == 13:
+                result_per50 = self.percentile_50(chosen_column_list)
+                print(MAKE_GREEN, "The 50th percentile value of the column", chosen_column_header, "is", result_per50, RESET)
+
+            elif ans == 14:
+                result_per60 = self.percentile_60(chosen_column_list)
+                print(MAKE_GREEN, "The 60th percentile value of the column", chosen_column_header, "is", result_per60, RESET)
+
+            elif ans == 15:
+                result_per80 = self.percentile_80(chosen_column_list)
+                print(MAKE_GREEN, "The 80th percentile value of the column", chosen_column_header, "is", result_per80, RESET)
+
+            elif ans == 16:
+                self.print_rows()
+
+            elif ans == 17:
+                self.print_analysis()
+
+        except ValueError:
+            print(MAKE_RED, 'The column you chose does not include integers or floats for this action.', RESET)
+
+        except Exception as ex:
+            print(MAKE_RED, ex, RESET)
+
+        ############################################################################
+
+    # prints each column in the dataset to the terminal.
+    # this is needed to show options to the user which columns are available to work with.
+    def print_column_names(self):
+        for i in range(self.size):
+            print(i+1,":", self.columns_as_lists[i][0])
+
+        print("\n")
+
+    # strips away quotes of a value in each column in the dataset.
+    # each value in the dataset needs to be iterated over and be sanitized for
+    # other processes to work purely with numbers or strings.
     def remove_punctuation(self):
         for i in range(len(self.columns_as_lists)):
             for j in range(len(self.columns_as_lists[i])):
                 self.columns_as_lists[i][j] = self.columns_as_lists[i][j].replace('"', '')
 
-    def column_is_numerical(self, column_choice):
-        column_to_see = self.columns_as_lists[column_choice]
-        result = False
-
-        if column_to_see[1].isdigit() or column_to_see[1].isnumeric():
+    # determines if a column contains numerical numbers or not.
+    # exception handing is needed because it needs to determine if an
+    # item in the given generic list can be converted to a number or not.
+    def column_is_numerical(self, values_list):
+        if values_list[1].isdigit() or values_list[1].isnumeric():
             result = True
 
         # if it errors converting the string to number, then column isn't a numeric column.
         try:
-            float(column_to_see[1])
-            int(column_to_see[1])
+            float(values_list[1])
 
             result = True
         except:
@@ -99,276 +255,143 @@ class Airport:
 
         return result      
 
-    def print_column_names(self):
-        for i in range(self.size):
-            print(i+1,":", self.columns_as_lists[i][0])
-
-        print("\n")
-
-    def menu(self):
-        num = 0
-        valid = False
-        options = ['Drop a Column', 'Count Distinct Value', 'Search for a Value', 'Sort a Column', 'Mean of a Column', 
-            'Median of a Column', 'Mode of a Column', 'Standard Deviation', 'Variance', 'Minimum', 'Maximum',
-            '20 Percentile', '40 Percentile', '50 Percentile', '60 Percentile', '80 Percentile', 'Print Rows', 'Analysis']
-    
-        for i in range(len(options)):
-            print(num+1, ':', options[i])
-            num += 1
-
-        while(valid == False):
-            ans = input('What would you like to do? ')
-            ans = int(ans)
-            ans -= 1
-
-            if ans < 0 or ans > len(options):
-                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
-            else:
-                valid = True
-
-        
-        choice = None
-        
-        # if we are just printing rows, or showing the analysis don't list the columns
-        if ans != 16 and ans != 17:
-            choice = self.choose_column()
-        
-        if ans == 0:
-            self.drop_column()
-        elif ans == 1:
-            self.count_distinct_value(choice)
-        elif ans == 2:
-            self.search_value(choice)
-        elif ans == 3:
-            self.sort_column(choice)
-        elif ans == 4:
-            self.mean(choice, True)
-        elif ans == 5:
-            self.median(choice)
-        elif ans == 6:
-            self.mode(choice)
-        elif ans == 7:
-            self.standard_deviation(choice)
-        elif ans == 8:
-            self.variance(choice, False, 0)
-        elif ans == 9:
-            self.minimum(choice)
-        elif ans == 10:
-            self.maximum(choice)
-        elif ans == 11:
-            self.percentile_20(choice)
-        elif ans == 12:
-            self.percentile_40(choice)
-        elif ans == 13:
-            self.percentile_50(choice)
-        elif ans == 14:
-            self.percentile_60(choice)
-        elif ans == 15:
-            self.percentile_80(choice)
-        elif ans == 16:
-            self.print_rows()
-        elif ans == 17:
-            self.analysis()
-
-    
-    def search_value(self, column_choice):
-        column_chosen = self.columns_as_lists[column_choice]
-        count = len(column_chosen)
-        
-        valid = False
-
-        while valid == False:
-            ans = int(input("Choose a row number (1 - " + str(count) + ") in column " + column_chosen[0] + ": "))
-            
-            if ans < 1 or ans > count:
-                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
-            else:
-                valid = True
-
-                if ans == count:
-                    print("Value at row", ans, "in column " + column_chosen[0] + " is", column_chosen[ans - 1])
-                    ans -= 1
-                else:
-                    print("Value at row", ans, "in column " + column_chosen[0] + " is", column_chosen[ans])
-
+    # sorts a column given a choice of a column number.
+    # checking if a column is numerical is needed to sort only numbers or only strings as keys.
     def sort_column(self, column_choice):
         column_chosen = self.columns_as_lists[column_choice]
         copy_of_column_chosen = column_chosen[1:]
 
-        valid = False
+        option = None
 
-        while valid == False:
-            sort_order = input("Which sort order use? (asc/desc)")
+        while option != "asc" and option != "desc":
+            option = input("Which sort order use? (asc|desc): ")
 
-            if sort_order != "asc" and sort_order != "desc":
-                print(MAKE_RED, "Option given isn\'t valid, please try again", RESET)
-            else:
-                valid = True
-
-        if self.column_is_numerical(column_choice):
+        if self.column_is_numerical(column_chosen):
             # ascending order
-            if sort_order == "asc":
+            if option == "asc":
                 copy_of_column_chosen.sort(key = float)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print("Column " + column_chosen[0] + " sorted in ascending order.")
+                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in ascending order.", RESET)
 
             # descending order
-            elif sort_order == "desc":
+            elif option == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = float)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print("Column " + column_chosen[0] + " sorted in descending order.")
+                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in descending order.", RESET)
         else:
             # ascending order
-            if sort_order == "asc":
+            if option == "asc":
                 copy_of_column_chosen.sort(key = str)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print("Column " + column_chosen[0] + " sorted in ascending order.")
+                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in ascending order.", RESET)
 
             # descending order
-            elif sort_order == "desc":
+            elif option == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = str)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print("Column " + column_chosen[0] + " sorted in descending order.")
-            
+                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in descending order.", RESET)
 
-    def unique(self, column):
-        return set(column)
-
-    def drop_column(self):
-        valid = False
-
-        while(valid == False):
-            ans = input('Enter the number of the column you\'d like to drop: ')
-
-            if int(ans) < 1 or int(ans) > self.size:
-                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
-            else:
-                valid = True
-
-        drop = int(ans)
-        self.columns_as_lists.pop(drop-1)
+    # deletes a column from loaded dataset.
+    # all the columns in the dataset are the only valid ones to be deleted,
+    # and all other choices outside this range are invalid and disregarded.
+    def drop_column(self, column_number):
+        self.columns_as_lists.pop(column_number-1)
         self.size = len(self.columns_as_lists)
 
+    # prints a menu to the user for available actions to the database.
     def choose_column(self):
-        valid = False
-
         self.print_column_names()
 
-        column_option = 0
+        column_option = -1
 
-        while(valid == False):
-            column_option = input('Enter the number of the column of you\'re choosing: ')
-            column_option = int(column_option)
-            column_option -= 1
+        while(column_option < 1 or column_option > self.size):
+            column_option = int(input('Enter the number of the column of you\'re choosing: '))
 
-            if column_option < 0 or column_option > self.size:
-                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
-            else:
-                valid = True
-
-        return column_option
-        
-    def list_for_chosen_column(self, number):
+        return column_option - 1
+    
+    # converts a raw column set to either a list or a dictionary.
+    # column headers are stripped away so indexing doesn't include the column header.
+    # it convert a column into a numerically indexed list regardless if the given column is numerical or not.
+    # returns: a list or dictionary of a given column.
+    def list_for_chosen_column(self, column_number):
+        raw_column = self.columns_as_lists[column_number]
         new_column = []
 
-        for i in range(1, len(self.columns_as_lists[number])):
-            try:
-                new_column.append(int(self.columns_as_lists[number][i]))
-            except:
-                break
+        if self.column_is_numerical(raw_column):
+            for i in range(1, len(raw_column) - 1):
+                new_column.append(float(raw_column[i]))
+        else:
+            new_column = {}
 
-        for i in range(1, len(self.columns_as_lists[number])):   
-            try:
-                new_column.append(float(self.columns_as_lists[number][i]))
-            except:
-                print(MAKE_RED, 'The column you chose does not include integers or floats', RESET)
-                return False
+            for i in range(1, len(raw_column) - 1):   
+                new_column[i - 1] = raw_column[i]
 
         return new_column
-
-    def count_distinct_value(self, column):
-        valid = False
-        count = 0
-        distinct = 0
-
-        for i in range(self.size):
-            if i == column:
-                print('The distinct values of', self.columns_as_lists[i][0], 'are: ')
-                distinct_list = self.unique(self.columns_as_lists[i][1:])
-                num = 0
-
-                for value in distinct_list:
-                    print(num+1, ':', value)
-                    num += 1
-
-                while(valid == False):
-                    choice = input('Which value would you like to count? ')
-                    choice = int(choice)
-                    choice -= 1
-
-                    if choice < 0 or choice > num+1:
-                        print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
-                    else:
-                        num = 0
-
-                        for value in distinct_list:
-                            num += 1
-                            if num == choice+1:
-                                distinct = value
-
-                        valid = True
-
-                for i in range(len(self.columns_as_lists[column])):
-                    if self.columns_as_lists[column][i] == distinct:
-                        count += 1
-
-        print('The amount of times', distinct, 'is in the data is', count, 'times.')
     
-    def mean(self, number, printMean):
+    # returns a value at a row in a generic list.
+    def search_value(self, values_list, row):
+        return values_list[row]
+
+    # retrieves the number of occurences of a value in a given column.
+    # it first checks if a column is numerical or not to make sure it's comparing
+    # numbers to numbers and strings to strings.
+    # returns: the value to look for, and the count as the result.
+    def count_distinct_value(self, column_number, value_to_look):
+        chosen_column_list = self.columns_as_lists[column_number][1:]
+        count = 0
+
+        if self.column_is_numerical(chosen_column_list):
+            for value in chosen_column_list:
+                if float(value) == float(value_to_look):
+                    count += 1
+        else:
+            for value in chosen_column_list:
+                if value == value_to_look:
+                    count += 1
+
+        return value_to_look, count
+
+    # creates a list of unique values of a given generic list.
+    # it will convert both dictionaries and sets into a list that can be indexed.
+    # returns: a list of uniquely mapped values.
+    def unique(self, values_list):
+        converted_list = None
+
+        if type(values_list) is dict:
+            converted_list = list(values_list.values())
+        else:
+            converted_list = values_list
+        
+        return list(set(converted_list))
+    
+    # returns the mean of a generic list.
+    def mean(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
+
         sum = 0
         mean = None
 
-        # get mean of the column of choice.
-        if (type(number) is int):
-            chosen_column = self.list_for_chosen_column(number)
+        for i in range(len(values_list)):
+            sum = sum + values_list[i]
 
-            # if column chosen doesn't include integers, the function will stop
-            if chosen_column == False:
-                return 0
-
-            for i in range(len(chosen_column)):
-                sum = sum + chosen_column[i]
-
-            mean = (sum / len(chosen_column))
-
-            if printMean == True:
-                print('The mean of the column', self.columns_as_lists[number][0], 'is:', mean)
-
-        elif (type(number) is list):
-            # get mean from a list for internal calculations.
-
-            for i in range(len(number)):
-                sum = sum + number[i]
-
-            mean = (sum / len(number))
+        mean = (sum / len(values_list))
         
         return mean
-            
+    
+    # returns the median of a generic list.
+    def median(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
 
-    def median(self, number):
-        chosen_column = self.list_for_chosen_column(number)
+        count = len(values_list)
+        sorted_list = sorted(values_list)
 
-        if chosen_column == False:
-            return 0
-
-        count = len(chosen_column)
-        sorted_list = sorted(chosen_column)
-
-        median = chosen_column[0]
+        median = values_list[0]
 
         # get index of middle number.
         middleIndex = math.floor(count / 2)
@@ -381,17 +404,17 @@ class Airport:
         else: 
             lower_middle_num = sorted_list[middleIndex - 1]
             upper_middle_num = sorted_list[middleIndex]
-            median = self.mean([lower_middle_num, upper_middle_num], False)
+            median = self.mean([lower_middle_num, upper_middle_num])
 
-        print('The median of the column', self.columns_as_lists[number][0], 'is:', median)
+        return median
 
-    def mode(self, number):
-        chosen_column = self.list_for_chosen_column(number)
+    # returns the mode of a generic list.
+    def mode(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
 
-        if chosen_column == False:
-            return 0
-
-        sorted_list = sorted(chosen_column)
+        sorted_list = sorted(values_list)
+        
         last_num = sorted_list[0]
         last_num_occurrences = 0
         current_num_occurrences = 0
@@ -416,78 +439,65 @@ class Airport:
             # set the previous iterated item to this (current) one.
             last_num = num
 
-        print('The mode of the column', self.columns_as_lists[number][0], 'is:', mode)
+        return mode
 
-    def standard_deviation(self, number):
-        chosen_column = self.list_for_chosen_column(number)
-        list_variance = self.variance(0, True, chosen_column)
+    # returns the standard deviation of a generic list.
+    # the standard deviation is the square root of the variance, 
+    # so variance function must be used for the calculation.
+    def standard_deviation(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
 
-        # the square root of the variance is the standard deviation.
+        list_variance = self.variance(values_list)
         standard_deviation = math.sqrt(list_variance)
 
-        print('The standard deviation of the column', self.columns_as_lists[number][0], 'is:', standard_deviation)
+        return standard_deviation
 
-    def variance(self, number, sd, number_list):
+    # returns the variance of a generic list.
+    # each item in the list must be calculated in order to
+    # calculate the variance overall.
+    def variance(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
+
         variance = 0
+        difference = 0
 
-        if(sd == False):
-            chosen_column = self.list_for_chosen_column(number)
-
-            if chosen_column == False:
-                return 0
-
-            count = len(chosen_column)
-            difference = 0
-            list_mean = self.mean(number_list, False)
-
-            for num in chosen_column:
-                # for each number, substract it by the mean of the list, then square it, and add it to the difference.
-                difference = difference + (num - list_mean) ** 2
-            
-            variance = difference / count
-            print('The variance of the column', self.columns_as_lists[number][0], 'is:', variance)
-
-        else:
-            count = len(number_list)
-            difference = 0
-            list_mean = self.mean(number_list, False)
-            
-            for num in number_list:
-                # for each number, substract it by the mean of the list, then square it, and add it to the difference.
-                difference = difference + (num - list_mean) ** 2
-            
-            variance = difference / count
+        list_mean = self.mean(values_list)
+        
+        for num in values_list:
+            # for each number, substract it by the mean of the list, then square it, and add it to the difference.
+            difference = difference + (num - list_mean) ** 2
+        
+        variance = difference / len(values_list)
 
         return variance
 
-    def minimum(self, number):
-        chosen_column = self.list_for_chosen_column(number)
+    # returns the minimum value contained in a given generic list.
+    def minimum(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
 
-        if chosen_column == False:
-            return 0
+        minimum = min(values_list)
+        return minimum
 
-        minimum = min(chosen_column)
-        print('The minimum of the column', self.columns_as_lists[number][0], 'is:', minimum)
+    # returns the maximum value contained in a given generic list.
+    def maximum(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
 
-    def maximum(self, number):
-        chosen_column = self.list_for_chosen_column(number)
+        maximum = min(values_list)
+        return maximum
 
-        if chosen_column == False:
-            return 0
+    ### percentile_20, percentile_40, percentile_50, percentile_60, percentile_80 ###
+    # returns the value at the 20th, 40th, 60th and 80th percentile of a given generic list.
+    def percentile_20(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
 
-        maximum = min(chosen_column)
-        print('The maximum of the column', self.columns_as_lists[number][0], 'is:', maximum)
-
-    def percentile_20(self, number):
-        chosen_column = self.list_for_chosen_column(number)
-
-        if chosen_column == False:
-            return 0
-
-        count = len(chosen_column)
-        sorted_list = sorted(chosen_column)
+        count = len(values_list)
+        sorted_list = sorted(values_list)
         
-        # calculate the percentile, as the 'rank'.
         rank = (0.20 * (count - 1)) + 1
         
         # if rank is an integer, then use the rank as an index and get the value at that index.
@@ -499,17 +509,15 @@ class Airport:
             # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
             percentile = sorted_list[math.floor(rank) - 1]
         
-        print('The 20th percentile of the column', self.columns_as_lists[number][0], 'is:', percentile)
+        return percentile
 
-    def percentile_40(self, number):
-        chosen_column = self.list_for_chosen_column(number)
+    def percentile_40(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
 
-        if chosen_column == False:
-            return 0
-
-        count = len(chosen_column)
-        sorted_list = sorted(chosen_column)
-
+        count = len(values_list)
+        sorted_list = sorted(values_list)
+        
         rank = (0.40 * (count - 1)) + 1
         
         if rank.is_integer():
@@ -517,16 +525,14 @@ class Airport:
         else:
             percentile = sorted_list[math.floor(rank) - 1]
         
-        print('The 40th percentile of the column', self.columns_as_lists[number][0], 'is:', percentile)
+        return percentile
 
-    def percentile_50(self, number):
-        chosen_column = self.list_for_chosen_column(number)
+    def percentile_50(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
 
-        if chosen_column == False:
-            return 0
-
-        count = len(chosen_column)
-        sorted_list = sorted(chosen_column)
+        count = len(values_list)
+        sorted_list = sorted(values_list)
         
         rank = (0.50 * (count - 1)) + 1
         
@@ -535,16 +541,14 @@ class Airport:
         else:
             percentile = sorted_list[math.floor(rank) - 1]
         
-        print('The 50th percentile of the column', self.columns_as_lists[number][0], 'is:', percentile)
+        return percentile
 
-    def percentile_60(self, number):
-        chosen_column = self.list_for_chosen_column(number)
+    def percentile_60(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
 
-        if chosen_column == False:
-            return 0
-
-        count = len(chosen_column)
-        sorted_list = sorted(chosen_column)
+        count = len(values_list)
+        sorted_list = sorted(values_list)
         
         rank = (0.60 * (count - 1)) + 1
         
@@ -553,16 +557,14 @@ class Airport:
         else:
             percentile = sorted_list[math.floor(rank) - 1]
         
-        print('The 60th percentile of the column', self.columns_as_lists[number][0], 'is:', percentile)
+        return percentile
 
-    def percentile_80(self, number):
-        chosen_column = self.list_for_chosen_column(number)
+    def percentile_80(self, values_list):
+        if type(values_list) is not list:
+            raise ValueError
 
-        if chosen_column == False:
-            return 0
-
-        count = len(chosen_column)
-        sorted_list = sorted(chosen_column)
+        count = len(values_list)
+        sorted_list = sorted(values_list)
         
         rank = (0.80 * (count - 1)) + 1
         
@@ -571,17 +573,16 @@ class Airport:
         else:
             percentile = sorted_list[math.floor(rank) - 1]
         
-        print('The 80th percentile of the column', self.columns_as_lists[number][0], 'is:', percentile)
+        return percentile
 
+    # prints a given number of rows in the loaded dataset.
+    # per the instructions on part 2, only 100, 1000 and 5000 rows can be printed and served
+    # as options to the user.
     def print_rows(self):
-        valid = False
+        N = 0
 
-        while valid == False:
-            N = int(input("Enter number of rows to display (100|1000|5000): "))
-
-            #if N == 100 or N == 1000 or N == 5000: # uncomment and delete one below when database is large enough to print 1000 and 5000 lines.
-            if N == 100:
-                valid = True
+        while N != 100 and N != 1000 and N != 5000:
+            N = int(input("How many rows to display? (100|1000|5000): "))
         
         for row_index in range(0, N):
             for column in self.columns_as_lists:
@@ -589,14 +590,19 @@ class Airport:
             
             print(end = "\n")
 
-    def analysis(self):
+    # displays the questions and answers for part 4. (Analysis)
+    # each question requires a problem to be solved in code, before the answer is displayed.
+    def print_analysis(self):
+        int_to_month = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
         print("\n")
 
         print("1. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
-        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+        mode_of_month = self.mode(self.list_for_chosen_column(0))
+        print(MAKE_YELLOW, "  The month with the most delays was "+ int_to_month[mode_of_month] +". There were delays recorded in that month.", RESET)
 
         print("2. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
-        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+        mode_of_month = self.mode(self.list_for_chosen_column(0))
+        print(MAKE_YELLOW, "  The month with the most delays was "+ int_to_month[mode_of_month] +". There were delays recorded in that month.", RESET)
 
         print("3. What airline carrier experience the most delays in January, July and December")
         print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
@@ -617,11 +623,14 @@ info = Airport(file)
 valid_input = False
 active = True
 
+# the main active loop of the program.
+# the application musts stay active as long as the user
+# does not opt out of the program by choice.
 while(active):
     info.menu()
 
     end = input('\nWould you like to end the program? (y/n) ')
 
     if end == 'y' or input == 'Y' or input == 'Yes':
-        print('\nThank you for testing our program! :)\n')
+        print(MAKE_MAGENTA, '\nThank you for testing our program! :)\n', RESET)
         active = False
