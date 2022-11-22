@@ -1,8 +1,19 @@
-#code to add to main file
-# Hector's version (11/20/2022)
+# code to add to main file
+# 11/21/2022
 
 import csv
 import math
+
+# color formatting for terminal
+MAKE_RED = "\u001b[31;1m"
+MAKE_BLUE = "\u001b[34;1m"
+MAKE_GREEN = "\u001b[32;1m"
+MAKE_YELLOW = "\u001b[33;1m"
+MAKE_MAGENTA = "\u001b[35;1m"
+MAKE_CYAN = "\u001b[36;1m"
+RESET = "\u001b[0m"
+
+
 
 #open csv file
 class Airport:
@@ -70,14 +81,6 @@ class Airport:
             for j in range(len(self.columns_as_lists[i])):
                 self.columns_as_lists[i][j] = self.columns_as_lists[i][j].replace('"', '')
 
-        # this prints all carrier names, now without quotes
-        """
-        for i in range(self.size):
-            if self.columns_as_lists[i][0] == 'CARRIER_NAME':
-                for j in range(len(self.columns_as_lists[i])):
-                    print(self.columns_as_lists[i][j])
-        """
-
     def column_is_numerical(self, column_choice):
         column_to_see = self.columns_as_lists[column_choice]
         result = False
@@ -88,6 +91,8 @@ class Airport:
         # if it errors converting the string to number, then column isn't a numeric column.
         try:
             float(column_to_see[1])
+            int(column_to_see[1])
+
             result = True
         except:
             result = False
@@ -105,7 +110,7 @@ class Airport:
         valid = False
         options = ['Drop a Column', 'Count Distinct Value', 'Search for a Value', 'Sort a Column', 'Mean of a Column', 
             'Median of a Column', 'Mode of a Column', 'Standard Deviation', 'Variance', 'Minimum', 'Maximum',
-            '20 Percentile', '40 Percentile', '50 Percentile', '60 Percentile', '80 Percentile', 'Print Rows']
+            '20 Percentile', '40 Percentile', '50 Percentile', '60 Percentile', '80 Percentile', 'Print Rows', 'Analysis']
     
         for i in range(len(options)):
             print(num+1, ':', options[i])
@@ -117,19 +122,19 @@ class Airport:
             ans -= 1
 
             if ans < 0 or ans > len(options):
-                print('Number given isn\'t valid, please try again')
+                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
             else:
                 valid = True
 
         
         choice = None
         
-        # if we are just printing rows, don't list the columns
-        if ans != 16:
+        # if we are just printing rows, or showing the analysis don't list the columns
+        if ans != 16 and ans != 17:
             choice = self.choose_column()
         
         if ans == 0:
-            self.drop_column(choice)
+            self.drop_column()
         elif ans == 1:
             self.count_distinct_value(choice)
         elif ans == 2:
@@ -161,7 +166,10 @@ class Airport:
         elif ans == 15:
             self.percentile_80(choice)
         elif ans == 16:
-            self.print_rows(choice)
+            self.print_rows()
+        elif ans == 17:
+            self.analysis()
+
     
     def search_value(self, column_choice):
         column_chosen = self.columns_as_lists[column_choice]
@@ -170,18 +178,18 @@ class Airport:
         valid = False
 
         while valid == False:
-            ans = int(input("Choose a row number (1 - " + str(count) + ") in column '" + column_chosen[0] + "':"))
+            ans = int(input("Choose a row number (1 - " + str(count) + ") in column " + column_chosen[0] + ": "))
             
             if ans < 1 or ans > count:
-                print('Number given isn\'t valid, please try again')
+                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
             else:
                 valid = True
 
                 if ans == count:
-                    print("Value at row", ans, "in column '" + column_chosen[0] + "' is", column_chosen[ans - 1])
+                    print("Value at row", ans, "in column " + column_chosen[0] + " is", column_chosen[ans - 1])
                     ans -= 1
                 else:
-                    print("Value at row", ans, "in column '" + column_chosen[0] + "' is", column_chosen[ans])
+                    print("Value at row", ans, "in column " + column_chosen[0] + " is", column_chosen[ans])
 
     def sort_column(self, column_choice):
         column_chosen = self.columns_as_lists[column_choice]
@@ -193,7 +201,7 @@ class Airport:
             sort_order = input("Which sort order use? (asc/desc)")
 
             if sort_order != "asc" and sort_order != "desc":
-                print("Option given isn\'t valid, please try again")
+                print(MAKE_RED, "Option given isn\'t valid, please try again", RESET)
             else:
                 valid = True
 
@@ -203,50 +211,47 @@ class Airport:
                 copy_of_column_chosen.sort(key = float)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print("Column '" + column_chosen[0] + "' sorted in ascending order.")
+                print("Column " + column_chosen[0] + " sorted in ascending order.")
 
             # descending order
             elif sort_order == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = float)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print("Column '" + column_chosen[0] + "' sorted in descending order.")
+                print("Column " + column_chosen[0] + " sorted in descending order.")
         else:
             # ascending order
             if sort_order == "asc":
                 copy_of_column_chosen.sort(key = str)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print("Column '" + column_chosen[0] + "' sorted in ascending order.")
+                print("Column " + column_chosen[0] + " sorted in ascending order.")
 
             # descending order
             elif sort_order == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = str)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print("Column '" + column_chosen[0] + "' sorted in descending order.")
+                print("Column " + column_chosen[0] + " sorted in descending order.")
             
 
     def unique(self, column):
         return set(column)
 
-    def drop_column(self, column):
+    def drop_column(self):
         valid = False
 
         while(valid == False):
             ans = input('Enter the number of the column you\'d like to drop: ')
 
             if int(ans) < 1 or int(ans) > self.size:
-                print('Number given isn\'t valid, please try again')
+                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
             else:
                 valid = True
 
         drop = int(ans)
         self.columns_as_lists.pop(drop-1)
         self.size = len(self.columns_as_lists)
-        #rows = int(len(self.columns_as_lists[0]))
-        #print("size of rows: ", rows)
-        #print("new size is: ", self.size)
 
     def choose_column(self):
         valid = False
@@ -261,7 +266,7 @@ class Airport:
             column_option -= 1
 
             if column_option < 0 or column_option > self.size:
-                print('Number given isn\'t valid, please try again')
+                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
             else:
                 valid = True
 
@@ -280,13 +285,12 @@ class Airport:
             try:
                 new_column.append(float(self.columns_as_lists[number][i]))
             except:
-                print('The column you chose does not include integers or floats')
+                print(MAKE_RED, 'The column you chose does not include integers or floats', RESET)
                 return False
 
         return new_column
 
     def count_distinct_value(self, column):
-        column = self.choose_column()      
         valid = False
         count = 0
         distinct = 0
@@ -307,7 +311,7 @@ class Airport:
                     choice -= 1
 
                     if choice < 0 or choice > num+1:
-                        print('Number given isn\'t valid, please try again')
+                        print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
                     else:
                         num = 0
 
@@ -505,17 +509,12 @@ class Airport:
 
         count = len(chosen_column)
         sorted_list = sorted(chosen_column)
-        
-        # calculate the percentile, as the 'rank'.
+
         rank = (0.40 * (count - 1)) + 1
         
-        # if rank is an integer, then use the rank as an index and get the value at that index.
         if rank.is_integer():
             percentile = sorted_list[math.floor(rank) - 1]
         else:
-            # if rank is a float, then get the value at that index as a integer, then add the rank's 
-            # part to its whole part, as the percentile. 
-            # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
             percentile = sorted_list[math.floor(rank) - 1]
         
         print('The 40th percentile of the column', self.columns_as_lists[number][0], 'is:', percentile)
@@ -529,16 +528,11 @@ class Airport:
         count = len(chosen_column)
         sorted_list = sorted(chosen_column)
         
-        # calculate the percentile, as the 'rank'.
         rank = (0.50 * (count - 1)) + 1
         
-        # if rank is an integer, then use the rank as an index and get the value at that index.
         if rank.is_integer():
             percentile = sorted_list[math.floor(rank) - 1]
         else:
-            # if rank is a float, then get the value at that index as a integer, then add the rank's 
-            # part to its whole part, as the percentile. 
-            # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
             percentile = sorted_list[math.floor(rank) - 1]
         
         print('The 50th percentile of the column', self.columns_as_lists[number][0], 'is:', percentile)
@@ -552,16 +546,11 @@ class Airport:
         count = len(chosen_column)
         sorted_list = sorted(chosen_column)
         
-        # calculate the percentile, as the 'rank'.
         rank = (0.60 * (count - 1)) + 1
         
-        # if rank is an integer, then use the rank as an index and get the value at that index.
         if rank.is_integer():
             percentile = sorted_list[math.floor(rank) - 1]
         else:
-            # if rank is a float, then get the value at that index as a integer, then add the rank's 
-            # part to its whole part, as the percentile. 
-            # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
             percentile = sorted_list[math.floor(rank) - 1]
         
         print('The 60th percentile of the column', self.columns_as_lists[number][0], 'is:', percentile)
@@ -575,28 +564,51 @@ class Airport:
         count = len(chosen_column)
         sorted_list = sorted(chosen_column)
         
-        # calculate the percentile, as the 'rank'.
         rank = (0.80 * (count - 1)) + 1
         
-        # if rank is an integer, then use the rank as an index and get the value at that index.
         if rank.is_integer():
             percentile = sorted_list[math.floor(rank) - 1]
         else:
-            # if rank is a float, then get the value at that index as a integer, then add the rank's 
-            # part to its whole part, as the percentile. 
-            # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
             percentile = sorted_list[math.floor(rank) - 1]
         
         print('The 80th percentile of the column', self.columns_as_lists[number][0], 'is:', percentile)
 
-    def print_rows(self, choice):
-        N = input("Enter number of rows to display: ")
-        file = "Airline_Delays_500_Lines.csv"
+    def print_rows(self):
+        valid = False
 
-        with open(file, "r") as file:
-            for i in range(int(N)):
-                line = next(file).strip()
-                print(line)
+        while valid == False:
+            N = int(input("Enter number of rows to display (100|1000|5000): "))
+
+            #if N == 100 or N == 1000 or N == 5000: # uncomment and delete one below when database is large enough to print 1000 and 5000 lines.
+            if N == 100:
+                valid = True
+        
+        for row_index in range(0, N):
+            for column in self.columns_as_lists:
+                print(column[row_index], end = " ")
+            
+            print(end = "\n")
+
+    def analysis(self):
+        print("\n")
+
+        print("1. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
+        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+
+        print("2. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
+        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+
+        print("3. What airline carrier experience the most delays in January, July and December")
+        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+
+        print("4. What was the average plane age of all planes with delays operated by American Airlines inc.")
+        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+
+        print("5. How many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
+        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+
+        print("6. What are the 5 Airports that had the most delays in 2019?")
+        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
 
 # Main Code
 file = 'Airline_Delays_500_Lines.csv'
@@ -613,23 +625,3 @@ while(active):
     if end == 'y' or input == 'Y' or input == 'Yes':
         print('\nThank you for testing our program! :)\n')
         active = False
-
-
-"""
-    num = 1
-    for value in info.column:
-        print(num, ' - ', info.column[num-1])
-        num += 1
-
-for i in range(info.size):
-    # print each column
-    print(info.columns_as_lists[i])  # All the values in the first column of your CSV
-"""
-        # print total number of columns
-"""
-        print("Total columns:", self.size)
-
-        for i in range(self.size):
-            print(i,":", self.columns_as_lists[i][0])
-        print("\n")
-"""
