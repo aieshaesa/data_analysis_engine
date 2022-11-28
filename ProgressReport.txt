@@ -1,0 +1,11 @@
+1. What is the progress your group has accomplished so far?
+    We have completed everything except for the analysis questions at the end.
+2. What percentage of your code implementation has your group finished?
+    We'd say that we've done about 90% of the code implementation, all that's left is the analysis part and cleaning up some areas of code
+3. Do you see any roadblocks that will prevent you from finishing this project?
+    We don't see any current roadblocks, we've had a couple such as the funtions printing the results, but we've handled that already.
+4. Are all students in your group working in this project sharing the workload fairly?
+    Yes, we've all put in equal amount of work and have also helped each other with work that we've done.
+5. What is the plan of your group to make sure your software is reliable?
+    We've tested out each function with different inputs to find bugs or ways that the software will break, then we've edited the code to handle those issues.
+    
