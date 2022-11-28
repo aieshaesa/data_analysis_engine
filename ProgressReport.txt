@@ -1,7 +1,7 @@
 1. What is the progress your group has accomplished so far?
-    We have completed everything except for the analysis questions at the end.
+    We have completed everything except for the analysis questions at the end. We were able to write and test functions for each requirement in all 3 parts for the project.
 2. What percentage of your code implementation has your group finished?
-    We'd say that we've done about 90% of the code implementation, all that's left is the analysis part and cleaning up some areas of code
+    We'd say that we've done about 90% of the code implementation, all that's left is the analysis part and cleaning up some areas of code. 
 3. Do you see any roadblocks that will prevent you from finishing this project?
     We don't see any current roadblocks, we've had a couple such as the funtions printing the results, but we've handled that already.
 4. Are all students in your group working in this project sharing the workload fairly?
