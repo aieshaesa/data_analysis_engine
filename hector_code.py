@@ -2,7 +2,6 @@
 # 11/21/2022
 
 import csv
-import math
 
 # color formatting for terminal
 MAKE_RED = "\u001b[31;1m"
@@ -13,7 +12,8 @@ MAKE_MAGENTA = "\u001b[35;1m"
 MAKE_CYAN = "\u001b[36;1m"
 RESET = "\u001b[0m"
 
-
+def math_floor(n):
+    return n // 1
 
 #open csv file
 class Airport:
@@ -394,7 +394,7 @@ class Airport:
         median = values_list[0]
 
         # get index of middle number.
-        middleIndex = math.floor(count / 2)
+        middleIndex = math_floor(count / 2)
 
         # scenario 1: if the count is odd, return the middle-most number.
         if (count % 2) == 1:
@@ -449,7 +449,7 @@ class Airport:
             raise ValueError
 
         list_variance = self.variance(values_list)
-        standard_deviation = math.sqrt(list_variance)
+        standard_deviation = list_variance ** 0.5
 
         return standard_deviation
 
@@ -502,12 +502,12 @@ class Airport:
         
         # if rank is an integer, then use the rank as an index and get the value at that index.
         if rank.is_integer():
-            percentile = sorted_list[math.floor(rank) - 1]
+            percentile = sorted_list[math_floor(rank) - 1]
         else:
             # if rank is a float, then get the value at that index as a integer, then add the rank's 
             # part to its whole part, as the percentile. 
             # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
-            percentile = sorted_list[math.floor(rank) - 1]
+            percentile = sorted_list[math_floor(rank) - 1]
         
         return percentile
 
@@ -521,9 +521,9 @@ class Airport:
         rank = (0.40 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math.floor(rank) - 1]
+            percentile = sorted_list[math_floor(rank) - 1]
         else:
-            percentile = sorted_list[math.floor(rank) - 1]
+            percentile = sorted_list[math_floor(rank) - 1]
         
         return percentile
 
@@ -537,9 +537,9 @@ class Airport:
         rank = (0.50 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math.floor(rank) - 1]
+            percentile = sorted_list[math_floor(rank) - 1]
         else:
-            percentile = sorted_list[math.floor(rank) - 1]
+            percentile = sorted_list[math_floor(rank) - 1]
         
         return percentile
 
@@ -553,9 +553,9 @@ class Airport:
         rank = (0.60 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math.floor(rank) - 1]
+            percentile = sorted_list[math_floor(rank) - 1]
         else:
-            percentile = sorted_list[math.floor(rank) - 1]
+            percentile = sorted_list[math_floor(rank) - 1]
         
         return percentile
 
@@ -569,9 +569,9 @@ class Airport:
         rank = (0.80 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math.floor(rank) - 1]
+            percentile = sorted_list[math_floor(rank) - 1]
         else:
-            percentile = sorted_list[math.floor(rank) - 1]
+            percentile = sorted_list[math_floor(rank) - 1]
         
         return percentile
 
@@ -596,25 +596,27 @@ class Airport:
         int_to_month = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
         print("\n")
 
-        print("1. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
-        mode_of_month = self.mode(self.list_for_chosen_column(0))
-        print(MAKE_YELLOW, "  The month with the most delays was "+ int_to_month[mode_of_month] +". There were delays recorded in that month.", RESET)
+        print("1. How many airlines are included in the data set? Print the first 5 in alphabetical order.")
 
-        print("2. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
-        mode_of_month = self.mode(self.list_for_chosen_column(0))
-        print(MAKE_YELLOW, "  The month with the most delays was "+ int_to_month[mode_of_month] +". There were delays recorded in that month.", RESET)
+        print("2. How many departing airports are included in the data set? Print the last 5 in alphabetical order.")
 
-        print("3. What airline carrier experience the most delays in January, July and December")
-        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+        print("3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
 
-        print("4. What was the average plane age of all planes with delays operated by American Airlines inc.")
-        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+        print("4. What is the airport that averaged the greatest number of passengers recorded in 2019? Print the 5 airport that averaged the greatest number of passengers in 2019.")
 
-        print("5. How many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
-        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+        print("5. What is the airline that averaged the greatest number of employees (Flight attendants and ground service) in 2019? Print the 5 airlines that averaged the greatest number of employees in 2019.")
 
-        print("6. What are the 5 Airports that had the most delays in 2019?")
-        print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
+        print("6. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
+        
+        print("7. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
+
+        print("8. What airline carrier experience the most delays in January, July and December")
+
+        print("9. What was the average plane age of all planes with delays operated by American Airlines inc.")
+
+        print("10. WHow many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
+
+        print("11. What are the 5 airports (Departing Airports) that had the most delays in 2019? Print the airports and the number of delays")
 
 # Main Code
 file = 'Airline_Delays_500_Lines.csv'
