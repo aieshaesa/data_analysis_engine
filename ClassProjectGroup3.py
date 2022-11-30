@@ -272,28 +272,28 @@ class Airport:
                 copy_of_column_chosen.sort(key = float)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in ascending order.", RESET)
+                print(MAKE_GREEN, "Column " + str(column_chosen) + " sorted in ascending order.", RESET)
 
             # descending order
             elif option == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = float)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in descending order.", RESET)
+                print(MAKE_GREEN, "Column " + str(column_chosen) + " sorted in descending order.", RESET)
         else:
             # ascending order
             if option == "asc":
                 copy_of_column_chosen.sort(key = str)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in ascending order.", RESET)
+                print(MAKE_GREEN, "Column " + str(column_chosen) + " sorted in ascending order.", RESET)
 
             # descending order
             elif option == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = str)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in descending order.", RESET)
+                print(MAKE_GREEN, "Column " + str(column_chosen) + " sorted in descending order.", RESET)
 
     # deletes a column from loaded dataset.
     # all the columns in the dataset are the only valid ones to be deleted,
