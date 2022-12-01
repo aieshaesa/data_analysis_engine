@@ -91,12 +91,15 @@ class Airport:
             print(i+1, ':', options[i])
 
         while(valid == False):
-            ans = int(input('What would you like to do? (1 - '+ str(options_length) +'): '))
+            try:
+                ans = int(input('What would you like to do? (1 - '+ str(options_length) +'): '))
 
-            if ans < 1 or ans > options_length:
-                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
-            else:
-                valid = True
+                if ans < 1 or ans > options_length:
+                    print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
+                else:
+                    valid = True
+            except:
+                print(MAKE_RED, 'Invalid action.', RESET)
         
         ans -= 1
 
@@ -272,28 +275,28 @@ class Airport:
                 copy_of_column_chosen.sort(key = float)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in ascending order.", RESET)
+                print(MAKE_GREEN, "Column " + str(column_chosen) + " sorted in ascending order.", RESET)
 
             # descending order
             elif option == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = float)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in descending order.", RESET)
+                print(MAKE_GREEN, "Column " + str(column_chosen) + " sorted in descending order.", RESET)
         else:
             # ascending order
             if option == "asc":
                 copy_of_column_chosen.sort(key = str)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in ascending order.", RESET)
+                print(MAKE_GREEN, "Column " + str(column_chosen) + " sorted in ascending order.", RESET)
 
             # descending order
             elif option == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = str)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in descending order.", RESET)
+                print(MAKE_GREEN, "Column " + str(column_chosen) + " sorted in descending order.", RESET)
 
     # deletes a column from loaded dataset.
     # all the columns in the dataset are the only valid ones to be deleted,
@@ -309,7 +312,10 @@ class Airport:
         column_option = -1
 
         while(column_option < 1 or column_option > self.size):
-            column_option = int(input('Enter the number of the column of you\'re choosing: '))
+            try:
+                column_option = int(input('Enter the number of the column of you\'re choosing: '))
+            except:
+                print(MAKE_RED, 'Invalid action.', RESET)
 
         return column_option - 1
     
@@ -598,28 +604,39 @@ class Airport:
 
         print("1. How many airlines are included in the data set? Print the first 5 in alphabetical order.")
 
-        print("2. How many departing airports are included in the data set? Print the last 5 in alphabetical order.")
+        first5Airlines = []
 
-        print("3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
+        for i in range(5):
+            first5Airlines.append(self.columns_as_lists[8][i + 1])
 
-        print("4. What is the airport that averaged the greatest number of passengers recorded in 2019? Print the 5 airport that averaged the greatest number of passengers in 2019.")
+        first5Airlines.sort()
 
-        print("5. What is the airline that averaged the greatest number of employees (Flight attendants and ground service) in 2019? Print the 5 airlines that averaged the greatest number of employees in 2019.")
+        for airline in first5Airlines:
+            print(MAKE_YELLOW, airline, RESET)
 
-        print("6. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
+        # print("2. How many departing airports are included in the data set? Print the last 5 in alphabetical order.")
+
+        # print("3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
+
+        # print("4. What is the airport that averaged the greatest number of passengers recorded in 2019? Print the 5 airport that averaged the greatest number of passengers in 2019.")
+
+        # print("5. What is the airline that averaged the greatest number of employees (Flight attendants and ground service) in 2019? Print the 5 airlines that averaged the greatest number of employees in 2019.")
+
+        # print("6. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
         
-        print("7. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
+        # print("7. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
 
-        print("8. What airline carrier experience the most delays in January, July and December")
+        # print("8. What airline carrier experience the most delays in January, July and December")
 
-        print("9. What was the average plane age of all planes with delays operated by American Airlines inc.")
+        # print("9. What was the average plane age of all planes with delays operated by American Airlines inc.")
 
-        print("10. WHow many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
+        # print("10. WHow many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
 
-        print("11. What are the 5 airports (Departing Airports) that had the most delays in 2019? Print the airports and the number of delays")
+        # print("11. What are the 5 airports (Departing Airports) that had the most delays in 2019? Print the airports and the number of delays")
 
 # Main Code
-file = 'Airline_Delays_500_Lines.csv'
+#file = 'Airline_Delays_500_Lines.csv'
+file = "Airline_Delays_500_Lines.csv"
 info = Airport(file) 
 
 valid_input = False
@@ -630,9 +647,12 @@ active = True
 # does not opt out of the program by choice.
 while(active):
     info.menu()
+    
+    try:
+        end = input('\nWould you like to end the program? (y/n) ')
+    except:
+        print(MAKE_RED, 'Either "y" (yes) or "n" (no)', RESET)
 
-    end = input('\nWould you like to end the program? (y/n) ')
-
-    if end == 'y' or input == 'Y' or input == 'Yes':
+    if end == 'y' or end == 'Y' or end == 'Yes':
         print(MAKE_MAGENTA, '\nThank you for testing our program! :)\n', RESET)
         active = False
