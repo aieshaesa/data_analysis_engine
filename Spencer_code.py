@@ -9,12 +9,15 @@
 # Student 4: Hector Martinez
 # DESCRIPTION: Implementation Basic Data Analysis Routines
 #####################################################################
+# code to add to main file
+# 11/21/2022
 
 # code to add to main file
 # 11/21/2022
 
 import csv
 import math
+import os
 
 # color formatting for terminal
 MAKE_RED = "\u001b[31;1m"
@@ -265,12 +268,8 @@ class Airport:
         except:
             result = False
 
-        return result    
-        
-        
-        
-        
-########################################## Fixed error with asc/desc printing #################################################
+        return result      
+
     # sorts a column given a choice of a column number.
     # checking if a column is numerical is needed to sort only numbers or only strings as keys.
     def sort_column(self, column_choice):
@@ -310,11 +309,6 @@ class Airport:
                 column_chosen[1:] = copy_of_column_chosen
 
                 print(MAKE_GREEN, "Column " + str(column_chosen) + " sorted in descending order.", RESET)
-###############################################################################################################
-
-
-
-
 
     # deletes a column from loaded dataset.
     # all the columns in the dataset are the only valid ones to be deleted,
@@ -638,8 +632,30 @@ class Airport:
         print(MAKE_YELLOW, "  Ans:", "<answer>", RESET)
 
 # Main Code
-file = 'Airline_Delays_500_Lines.csv'
-info = Airport(file) 
+################### read files from directory #####################
+def file_input():
+    fileList = []
+    good_file = False
+    #file = 'Airline_Delays_500_Lines.csv'
+    for x in os.listdir():
+        if x.endswith(".csv"):
+            # Prints only text file present in My Folder
+            fileList.append(x)
+    while good_file == False:
+        for idx,i in enumerate(fileList):
+            print(idx+1,":",i)
+        file = input("\nChoose which file to load: ")
+        for idx,i in enumerate(fileList):
+            #print(file,"-->", idx)
+            if file == str(idx+1):
+                good_file = True
+                file = i
+    return file
+####################################################################
+
+#Main Code
+file = file_input() #file input function
+info = Airport(file)
 
 valid_input = False
 active = True
@@ -655,11 +671,3 @@ while(active):
     if end == 'y' or input == 'Y' or input == 'Yes':
         print(MAKE_MAGENTA, '\nThank you for testing our program! :)\n', RESET)
         active = False
-
-
-
-
-
-
-
-
