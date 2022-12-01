@@ -1,9 +1,10 @@
 # code to add to main file
 # 11/21/2022
 
+import os
 import csv
 import math
-from datetime import datetime
+import datetime
 
 # color formatting for terminal
 MAKE_RED = "\u001b[31;1m"
@@ -21,36 +22,59 @@ class Airport:
     column = []
     size = 0
 
+
+    def file_input(self):
+        fileList = []
+        good_file = False
+        #file = 'Airline_Delays_500_Lines.csv'
+        for x in os.listdir():
+            if x.endswith(".csv"):
+                # Prints only text file present in My Folder
+                fileList.append(x)
+        while good_file == False:
+            for idx,i in enumerate(fileList):
+                print(idx+1,":",i)
+            time = self.get_time()
+            print("[", time, "] Please choose the number of the file to load:")
+            file = input()
+            for idx,i in enumerate(fileList):
+                #print(file,"-->", idx)
+                if file == str(idx+1):
+                    good_file = True
+                    file = i
+        return file
+
     def load_file(self, filename):
         lines = []
         missing = 'NONE'
+        start = self.get_time()
+        with open(filename, 'r') as read_file:
+            reader = csv.reader(read_file)
 
-        try:
-            with open(filename, 'r') as read_file:
-                reader = csv.reader(read_file)
+            for row in reader:
+                lines.append(row)
 
-                for row in reader:
-                    lines.append(row)
+                for field in row:
+                    if field == missing:
+                        lines.remove(row)
 
-                    for field in row:
-                        if field == missing:
-                            lines.remove(row)
+        # for loop to ensure no duplicates are added
+        no_dup = []
+        for i in lines:
+            if i not in no_dup:
+                no_dup.append(i)
 
-            # for loop to ensure no duplicates are added
-            no_dup = []
-            for i in lines:
-                if i not in no_dup:
-                    no_dup.append(i)
+        with open('No_Missing_Values.csv', 'w', newline='') as write_file:
+            writer = csv.writer(write_file)
+            writer.writerows(no_dup)
 
-            with open('No_Missing_Values.csv', 'w', newline='') as write_file:
-                writer = csv.writer(write_file)
-                writer.writerows(no_dup)
+        self.load_lists('No_Missing_Values.csv')
+        end = self.get_time()
 
-            self.load_lists('No_Missing_Values.csv')
-            return True
-            
-        except:
-            return False
+        total_time = end - start
+
+        return total_time
+
 
     def load_lists(self, file):
         with open(file) as csv_file:
@@ -81,11 +105,6 @@ class Airport:
                 
         self.remove_punctuation()
 
-    def get_time(self):
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        return current_time
-
     # prints the menu to the terminal that servers as the main interface to the user.
     # all the options listed are the ones that are valid to choose from.
     # not all actions can be made towards particular columns, so exceptions must be raised to prevent errors.    
@@ -98,9 +117,6 @@ class Airport:
             'Search Element in Column', 'Count Distinct Value', 'Sort Column', 
             'Print first 100, 1000, or 5000 Rows', 'Back to Main Menu']
         exploring_options_length = len(exploring_options)
-
-
-
 
         try: 
             print('Main Menu:')
@@ -139,27 +155,18 @@ class Airport:
             if ans == 0:
                 print('Load data set:')
                 print('**************')
+
+                filename = self.file_input()
                 time = self.get_time()
-                print("[", time, "] Please type the name of the file to load:")
-                filename = input()
-                filename = 'Airline_Delays_500_Lines.csv'
-                time = self.get_time()
-                valid_file = self.load_file(filename)
-                while(valid_file == False):
-                    filname = input("Filename doesn't match any file in our system, please try again: ")
-                    valid_file = self.load_file(filename)
+                total_time = self.load_file(filename)
 
                 time = self.get_time()
-                start = time
                 total_columns = len(self.columns_as_lists)
                 print("[", time, "] Total Columns Read: ", total_columns)
 
                 time = self.get_time()
-                end = time
                 total_rows = len(self.columns_as_lists[0])
                 print("[", time, "] Total Rows Read: ", total_rows)
-
-                total_time = end - start
 
                 print("File loaded successfully! time to load ", total_time)
 
@@ -197,13 +204,13 @@ class Airport:
                     if self.size <= 1:
                         raise Exception("At least 1 column must remain in the dataset.")
                     
-                    option = -1
+                    option = 0
                     self.print_column_names()
 
                     while option < 1 or option > self.size:
                         option = int(input("Enter a column to drop (1 - "+ str(self.size) +"): "))
 
-                    column_dropped_header = self.columns_as_lists[option - 1][0]
+                    column_dropped_header = self.columns_as_lists[option-1][0]
                     self.drop_column(option)
 
                     print(MAKE_GREEN, 'Column', column_dropped_header, 'was dropped.', RESET)
@@ -212,15 +219,10 @@ class Airport:
                 if choice == 2:
                     print('(', choice+1, ') ', exploring_options[choice])
                     print('**********************')
-                    time = self.get_time()
-                    self.print_column_names()
-                    option = 0
+                    
+                    option = self.choose_column()
 
-                    while option < 1 or option > self.size:
-                        print("[", time, "] Name column to Describe (1 - "+ str(self.size) +"): ")
-                        option = int(input())
-
-                    chosen_column_header = self.columns_as_lists[option - 1][0]
+                    chosen_column_header = self.columns_as_lists[option][0]
                     self.list_for_chosen_column(option)
 
                     time = self.get_time()
@@ -231,9 +233,25 @@ class Airport:
 
                     print("Count: ", len(self.chosen_column))
                     print("Unique: ", self.unique(self.chosen_column))
-                    print("Mean: ", self.mean(self.chosen_column))
-                    print("Median: ", self.median(self.chosen_column))
-                    print("Mode: ", self.mode(self.chosen_column))
+
+                    mean = self.mean(self.chosen_column)
+                    if mean == False:
+                        print(MAKE_RED, 'The column you chose does not include integers or floats for this action. Cannot determine mean.', RESET)
+                    else:
+                        print("Mean: ", mean)
+
+                    median = self.median(self.chosen_column)
+                    if median == False:
+                        print(MAKE_RED, 'The column you chose does not include integers or floats for this action. Cannot determine median.', RESET)
+                    else:
+                        print("Median: ", median)
+
+                    mode = self.mode(self.chosen_column)
+                    if mode == False:
+                        print(MAKE_RED, 'The column you chose does not include integers or floats for this action. Cannot determine mode.', RESET)
+                    else:
+                        print("Mode: ", mode)
+
                     print("Standard Deviation (SD): ", self.standard_deviation(self.chosen_column))
                     print("Variance: ", self.variance(self.chosen_column))
                     print("Minimum: ", self.minimum(self.chosen_column))
@@ -252,24 +270,19 @@ class Airport:
                 if choice == 3:
                     print('(', choice+1, ') ', exploring_options[choice])
                     print('****************')
-                    self.print_column_names()
-                    option = 0
-                    time = self.get_time()
+                    
+                    option = self.choose_column()
 
-                    while option < 1 or option > self.size:
-                        print("[", time, "] Enter Column Number (1 - "+ str(self.size) +"): \n")
-                        option = int(input())
-
-                    chosen_column_header = self.columns_as_lists[option - 1][0]
+                    chosen_column_header = self.columns_as_lists[option][0]
                     for i in range(self.size):
-                        if i == option-1:
+                        if i == option:
                             print('The distinct values of', self.columns_as_lists[i][0], 'are: ')
                             distinct_list = self.unique(self.columns_as_lists[i][1:])
-                            num = 0
+
                             for value in distinct_list:
-                                print(num+1, ':', value)
-                                num += 1
-                    self.list_for_chosen_column(option-1)
+                                print(value)
+
+                    self.list_for_chosen_column(option)
                     count = 0
 
                     value = input('Enter element to Search: \n')
@@ -301,26 +314,34 @@ class Airport:
                     end = self.get_time()
                     total_time = end - start
                     if count > 0:
-                        print(MAKE_GREEN, '[', total_time, '] Element was found', count, 'times.', RESET)
-                        print('Search was successful! time to search was ', time)
+                        print(MAKE_GREEN, '[', total_time, ']', value, 'was found', count, 'times.', RESET)
+                        print(MAKE_GREEN, 'Search was successful! time to search was ', total_time, RESET)
                     else:
                         print(MAKE_RED, '[', time, '] Element was not found, search unsuccessful', RESET)
+                    
+                    print('\n')
 
                 # count distinct value
                 if choice == 4:
                     print('(', choice+1, ') ', exploring_options[choice])
-                    print('********************')
-                    option = 0
-                    time = self.get_time()
-                    self.print_column_names()
-                    while option < 1 or option > self.size:
-                        print("[", time, "] Enter Column Number (1 - "+ str(self.size) +"): \n")
-                        option = int(input())
-                    start = self.get_time()
-                    distinct_value, count = self.count_distinct_value(option, '')
-                    end = self.get_time()
+                    print('******************************')
 
-                    print(MAKE_GREEN, '[', time, '] The amount of times', distinct_value, 'is in the data is', count, 'time(s).', RESET)
+                    option = self.choose_column()
+
+                    total_time, distinct_value, count = self.count_distinct_value(option)
+                    time = self.get_time()
+
+                    if count > 0:
+                        print(MAKE_GREEN, '[', time, '] The amount of times', distinct_value, 'is in the data is', count, 'time(s).', RESET)
+                        print(MAKE_GREEN, 'Total time to count distinct value ', total_time, RESET)
+                    else:
+                        print(MAKE_RED, '[', time, '] Element was not found in data', RESET)
+                
+                # sort column
+                if choice == 5:
+                    print('(', choice+1, ') ', exploring_options[choice])
+                    print('********************')
+
 
             #analysis
             if ans == 2:
@@ -338,6 +359,11 @@ class Airport:
         return ans
 
         ############################################################################
+
+    # returns the current date and time
+    def get_time(self):
+        time = datetime.datetime.utcnow()
+        return time
 
     # prints each column in the dataset to the terminal.
     # this is needed to show options to the user which columns are available to work with.
@@ -368,7 +394,6 @@ class Airport:
         # if it errors converting the string to number, then column isn't a numeric column.
         try:
             float(values_list[1])
-
             result = True
         except:
             result = False
@@ -422,16 +447,16 @@ class Airport:
         self.columns_as_lists.pop(column_number-1)
         self.size = len(self.columns_as_lists)
 
-    # prints a menu to the user for available actions to the database.
+    # prints all columns to the user so they can choose which they'd like to use
     def choose_column(self):
+        option = 0
+        time = self.get_time()
         self.print_column_names()
-        print("dummy")
-        column_option = -1
+        while option < 1 or option > self.size:
+            print("[", time, "] Enter Column Number (1 - "+ str(self.size) +"): \n")
+            option = int(input())
 
-        while(column_option < 1 or column_option > self.size):
-            column_option = int(input('Enter the number of the column of you\'re choosing: '))
-
-        return column_option - 1
+        return option-1
     
     # converts a raw column set to either a list or a dictionary.
     # column headers are stripped away so indexing doesn't include the column header.
@@ -461,14 +486,12 @@ class Airport:
                 
             return False
     
-    # returns a value at a row in a generic list.
-    def search_value(self, values_list, row):
-        return values_list[row]
 
     # retrieves the number of occurences of a value in a given column.
     # it first checks if a column is numerical or not to make sure it's comparing
     # numbers to numbers and strings to strings.
     # returns: the value to look for, and the count as the result.
+    """
     def count_distinct_value(self, column_number, value_to_look):
         chosen_column_list = self.columns_as_lists[column_number][1:]
         count = 0
@@ -483,6 +506,43 @@ class Airport:
                     count += 1
 
         return value_to_look, count
+    """
+    def count_distinct_value(self, number):
+        valid = False
+        count = 0
+
+        for i in range(self.size):
+            if i == number:
+                print('The distinct values of', self.columns_as_lists[i][0], 'are: ')
+                distinct_list = self.unique(self.columns_as_lists[i][1:])
+                num = 0
+                for value in distinct_list:
+                    print(num+1, ':', value)
+                    num += 1
+
+                while(valid == False):
+                    choice = input('Which value would you like to count? ')
+                    choice = int(choice)
+                    choice -= 1
+                    if choice < 0 or choice > num+1:
+                        print('Number given isn\'t valid, please try again')
+                    else:
+                        num = 0
+                        for value in distinct_list:
+                            num += 1
+                            if num == choice+1:
+                                distinct = value
+                        valid = True
+
+                start = self.get_time()
+                for i in range(len(self.columns_as_lists[number])):
+                    if self.columns_as_lists[number][i] == distinct:
+                        count += 1
+                end = self.get_time()
+
+                total_time = end - start
+
+        return total_time, distinct, count
 
     # creates a list of unique values of a given generic list.
     # it will convert both dictionaries and sets into a list that can be indexed.
@@ -499,23 +559,28 @@ class Airport:
     
     # returns the mean of a generic list.
     def mean(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
+        try:
+            sum = 0
+            mean = None
 
-        sum = 0
-        mean = None
+            for i in range(len(values_list)):
+                sum = sum + values_list[i]
 
-        for i in range(len(values_list)):
-            sum = sum + values_list[i]
+            mean = (sum / len(values_list))
+            
+            return mean
 
-        mean = (sum / len(values_list))
-        
-        return mean
-    
+        except:
+            return False
+
     # returns the median of a generic list.
     def median(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
+        #if type(values_list) is not list:
+        #    raise ValueError
+        if self.column_is_numerical(values_list) == False:
+            print(MAKE_RED, 'The column you chose does not include integers or floats for this action. Cannot determine median', RESET)
+            
+
 
         count = len(values_list)
         sorted_list = sorted(values_list)
@@ -539,170 +604,200 @@ class Airport:
 
     # returns the mode of a generic list.
     def mode(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
+        #if type(values_list) is not list:
+        #    raise ValueError
+        try:
+            sorted_list = sorted(values_list)
+            
+            last_num = sorted_list[0]
+            last_num_occurrences = 0
+            current_num_occurrences = 0
 
-        sorted_list = sorted(values_list)
+            mode = sorted_list[0]
+
+            for num in sorted_list:
+                if last_num == num:
+                    # increment this number's occurence as long as we keep iterating over the same number
+                    current_num_occurrences += 1
+                
+                # if this number's occurrences passes the previous number's occurrences, make this number the new mode.
+                if current_num_occurrences > last_num_occurrences:            
+                    mode = last_num
+                    last_num_occurrences = current_num_occurrences
+
+                # if this current number we are reading isn't the same as the last number iterated, 
+                # reset the occurrences value for this new number.
+                if last_num != num:
+                    current_num_occurrences = 1
+                
+                # set the previous iterated item to this (current) one.
+                last_num = num
+
+            return mode
         
-        last_num = sorted_list[0]
-        last_num_occurrences = 0
-        current_num_occurrences = 0
-
-        mode = sorted_list[0]
-
-        for num in sorted_list:
-            if last_num == num:
-                # increment this number's occurence as long as we keep iterating over the same number
-                current_num_occurrences += 1
-            
-            # if this number's occurrences passes the previous number's occurrences, make this number the new mode.
-            if current_num_occurrences > last_num_occurrences:            
-                mode = last_num
-                last_num_occurrences = current_num_occurrences
-
-            # if this current number we are reading isn't the same as the last number iterated, 
-            # reset the occurrences value for this new number.
-            if last_num != num:
-                current_num_occurrences = 1
-            
-            # set the previous iterated item to this (current) one.
-            last_num = num
-
-        return mode
+        except:
+            return False
 
     # returns the standard deviation of a generic list.
     # the standard deviation is the square root of the variance, 
     # so variance function must be used for the calculation.
     def standard_deviation(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
+        #if type(values_list) is not list:
+        #    raise ValueError
+        try:
+            list_variance = self.variance(values_list)
+            standard_deviation = list_variance ** 0.5
 
-        list_variance = self.variance(values_list)
-        standard_deviation = list_variance ** 0.5
+            return standard_deviation
 
-        return standard_deviation
+        except:
+            return False
 
     # returns the variance of a generic list.
     # each item in the list must be calculated in order to
     # calculate the variance overall.
     def variance(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
+        #if type(values_list) is not list:
+        #    raise ValueError
+        try:
+            variance = 0
+            difference = 0
 
-        variance = 0
-        difference = 0
+            list_mean = self.mean(values_list)
+            
+            for num in values_list:
+                # for each number, substract it by the mean of the list, then square it, and add it to the difference.
+                difference = difference + (num - list_mean) ** 2
+            
+            variance = difference / len(values_list)
 
-        list_mean = self.mean(values_list)
+            return variance
         
-        for num in values_list:
-            # for each number, substract it by the mean of the list, then square it, and add it to the difference.
-            difference = difference + (num - list_mean) ** 2
-        
-        variance = difference / len(values_list)
-
-        return variance
+        except:
+            return False
 
     # returns the minimum value contained in a given generic list.
     def minimum(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
+        #if type(values_list) is not list:
+        #    raise ValueError
+        try:
+            minimum = min(values_list)
+            return minimum
 
-        minimum = min(values_list)
-        return minimum
+        except:
+            return False
 
     # returns the maximum value contained in a given generic list.
     def maximum(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
-
-        maximum = max(values_list)
-        return maximum
+        #if type(values_list) is not list:
+            #raise ValueError
+        try:
+            maximum = max(values_list)
+            return maximum
+        
+        except:
+            return False
 
     ### percentile_20, percentile_40, percentile_50, percentile_60, percentile_80 ###
     # returns the value at the 20th, 40th, 60th and 80th percentile of a given generic list.
     def percentile_20(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
-
-        count = len(values_list)
-        sorted_list = sorted(values_list)
+        #if type(values_list) is not list:
+            #raise ValueError
+        try:
+            count = len(values_list)
+            sorted_list = sorted(values_list)
+            
+            rank = (0.20 * (count - 1)) + 1
+            
+            # if rank is an integer, then use the rank as an index and get the value at that index.
+            if rank.is_integer():
+                percentile = sorted_list[math.floor(rank) - 1]
+            else:
+                # if rank is a float, then get the value at that index as a integer, then add the rank's 
+                # part to its whole part, as the percentile. 
+                # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
+                percentile = sorted_list[math.floor(rank) - 1]
+            
+            return percentile
         
-        rank = (0.20 * (count - 1)) + 1
-        
-        # if rank is an integer, then use the rank as an index and get the value at that index.
-        if rank.is_integer():
-            percentile = sorted_list[math.floor(rank) - 1]
-        else:
-            # if rank is a float, then get the value at that index as a integer, then add the rank's 
-            # part to its whole part, as the percentile. 
-            # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
-            percentile = sorted_list[math.floor(rank) - 1]
-        
-        return percentile
+        except:
+            return False
 
     def percentile_40(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
+        #if type(values_list) is not list:
+        #    raise ValueError
+        try:
+            count = len(values_list)
+            sorted_list = sorted(values_list)
+            
+            rank = (0.40 * (count - 1)) + 1
+            
+            if rank.is_integer():
+                percentile = sorted_list[math.floor(rank) - 1]
+            else:
+                percentile = sorted_list[math.floor(rank) - 1]
+            
+            return percentile
 
-        count = len(values_list)
-        sorted_list = sorted(values_list)
-        
-        rank = (0.40 * (count - 1)) + 1
-        
-        if rank.is_integer():
-            percentile = sorted_list[math.floor(rank) - 1]
-        else:
-            percentile = sorted_list[math.floor(rank) - 1]
-        
-        return percentile
+        except:
+            return False
 
     def percentile_50(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
+        #if type(values_list) is not list:
+        #    raise ValueError
+        try:
+            count = len(values_list)
+            sorted_list = sorted(values_list)
+            
+            rank = (0.50 * (count - 1)) + 1
+            
+            if rank.is_integer():
+                percentile = sorted_list[math.floor(rank) - 1]
+            else:
+                percentile = sorted_list[math.floor(rank) - 1]
+            
+            return percentile
 
-        count = len(values_list)
-        sorted_list = sorted(values_list)
-        
-        rank = (0.50 * (count - 1)) + 1
-        
-        if rank.is_integer():
-            percentile = sorted_list[math.floor(rank) - 1]
-        else:
-            percentile = sorted_list[math.floor(rank) - 1]
-        
-        return percentile
+        except:
+            return False
 
     def percentile_60(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
+        #if type(values_list) is not list:
+        #    raise ValueError
+        try:
+            count = len(values_list)
+            sorted_list = sorted(values_list)
+            
+            rank = (0.60 * (count - 1)) + 1
+            
+            if rank.is_integer():
+                percentile = sorted_list[math.floor(rank) - 1]
+            else:
+                percentile = sorted_list[math.floor(rank) - 1]
+            
+            return percentile
 
-        count = len(values_list)
-        sorted_list = sorted(values_list)
-        
-        rank = (0.60 * (count - 1)) + 1
-        
-        if rank.is_integer():
-            percentile = sorted_list[math.floor(rank) - 1]
-        else:
-            percentile = sorted_list[math.floor(rank) - 1]
-        
-        return percentile
+        except:
+            return False
 
     def percentile_80(self, values_list):
-        if type(values_list) is not list:
-            raise ValueError
+        #if type(values_list) is not list:
+        #    raise ValueError
+        try:
+            count = len(values_list)
+            sorted_list = sorted(values_list)
+            
+            rank = (0.80 * (count - 1)) + 1
+            
+            if rank.is_integer():
+                percentile = sorted_list[math.floor(rank) - 1]
+            else:
+                percentile = sorted_list[math.floor(rank) - 1]
+            
+            return percentile
 
-        count = len(values_list)
-        sorted_list = sorted(values_list)
-        
-        rank = (0.80 * (count - 1)) + 1
-        
-        if rank.is_integer():
-            percentile = sorted_list[math.floor(rank) - 1]
-        else:
-            percentile = sorted_list[math.floor(rank) - 1]
-        
-        return percentile
+        except:
+            return False
 
     # prints a given number of rows in the loaded dataset.
     # per the instructions on part 2, only 100, 1000 and 5000 rows can be printed and served
