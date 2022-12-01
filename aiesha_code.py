@@ -2,6 +2,7 @@
 # 11/21/2022
 
 import csv
+import math
 from datetime import datetime
 
 # color formatting for terminal
@@ -12,9 +13,6 @@ MAKE_YELLOW = "\u001b[33;1m"
 MAKE_MAGENTA = "\u001b[35;1m"
 MAKE_CYAN = "\u001b[36;1m"
 RESET = "\u001b[0m"
-
-def math_floor(n):
-    return n // 1
 
 #open csv file
 class Airport:
@@ -178,11 +176,12 @@ class Airport:
                 while(valid == False):
                     choice = int(input('What would you like to do? (1 - '+ str(exploring_options_length) +'): '))
 
-                    if choice < 1 or choice > options_length:
+                    if choice < 1 or choice > exploring_options_length:
                         print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
                     else:
                         valid = True
                 print('\n')
+
                 choice -= 1
                 
                 # list all columns
@@ -254,9 +253,12 @@ class Airport:
                     print('(', choice+1, ') ', exploring_options[choice])
                     print('****************')
                     self.print_column_names()
+                    option = 0
+                    time = self.get_time()
 
                     while option < 1 or option > self.size:
-                        option = int(input("[", time, "] Enter Column Number (1 - "+ str(self.size) +"): \n"))
+                        print("[", time, "] Enter Column Number (1 - "+ str(self.size) +"): \n")
+                        option = int(input())
 
                     chosen_column_header = self.columns_as_lists[option - 1][0]
                     for i in range(self.size):
@@ -271,7 +273,7 @@ class Airport:
                     count = 0
 
                     value = input('Enter element to Search: \n')
-
+                    start = self.get_time()
                     # three for loops with try blocks so that ints, floats, and strings
                     # will be counted
                     for i in range(len(self.chosen_column)):   
@@ -299,10 +301,26 @@ class Airport:
                     end = self.get_time()
                     total_time = end - start
                     if count > 0:
-                        print('[', time, '] Element was found', count, 'times.')
+                        print(MAKE_GREEN, '[', total_time, '] Element was found', count, 'times.', RESET)
                         print('Search was successful! time to search was ', time)
                     else:
-                        print('[', time, '] Element was not found, search unsuccessful')
+                        print(MAKE_RED, '[', time, '] Element was not found, search unsuccessful', RESET)
+
+                # count distinct value
+                if choice == 4:
+                    print('(', choice+1, ') ', exploring_options[choice])
+                    print('********************')
+                    option = 0
+                    time = self.get_time()
+                    self.print_column_names()
+                    while option < 1 or option > self.size:
+                        print("[", time, "] Enter Column Number (1 - "+ str(self.size) +"): \n")
+                        option = int(input())
+                    start = self.get_time()
+                    distinct_value, count = self.count_distinct_value(option, '')
+                    end = self.get_time()
+
+                    print(MAKE_GREEN, '[', time, '] The amount of times', distinct_value, 'is in the data is', count, 'time(s).', RESET)
 
             #analysis
             if ans == 2:
@@ -419,19 +437,29 @@ class Airport:
     # column headers are stripped away so indexing doesn't include the column header.
     # it convert a column into a numerically indexed list regardless if the given column is numerical or not.
     # returns: a list or dictionary of a given column.
-    def list_for_chosen_column(self, column_number):
-        raw_column = self.columns_as_lists[column_number]
-        new_column = []
-        
-        if self.column_is_numerical(raw_column):
-            for i in range(1, len(raw_column) - 1):
-                new_column.append(float(raw_column[i]))
-        else:
-            new_column = {}
+    def list_for_chosen_column(self, number):
+        self.chosen_column = []
+        is_number = False
+        for i in range(1, len(self.columns_as_lists[number])):
+            try:
+                self.chosen_column.append(int(self.columns_as_lists[number][i]))
+                is_number = True
+            except:
+                break
 
-            for i in range(1, len(raw_column) - 1):   
-                new_column[i - 1] = raw_column[i]
-        return new_column
+        if is_number == False:
+            for i in range(1, len(self.columns_as_lists[number])):   
+                try:
+                    self.chosen_column.append(float(self.columns_as_lists[number][i]))
+                    is_number = True
+                except:
+                    break
+        
+        if is_number == False:
+            for i in range(1, len(self.columns_as_lists[number])):
+                self.chosen_column.append(self.columns_as_lists[number][i])
+                
+            return False
     
     # returns a value at a row in a generic list.
     def search_value(self, values_list, row):
@@ -495,7 +523,7 @@ class Airport:
         median = values_list[0]
 
         # get index of middle number.
-        middleIndex = math_floor(count / 2)
+        middleIndex = math.floor(count / 2)
 
         # scenario 1: if the count is odd, return the middle-most number.
         if (count % 2) == 1:
@@ -587,7 +615,7 @@ class Airport:
         if type(values_list) is not list:
             raise ValueError
 
-        maximum = min(values_list)
+        maximum = max(values_list)
         return maximum
 
     ### percentile_20, percentile_40, percentile_50, percentile_60, percentile_80 ###
@@ -603,12 +631,12 @@ class Airport:
         
         # if rank is an integer, then use the rank as an index and get the value at that index.
         if rank.is_integer():
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         else:
             # if rank is a float, then get the value at that index as a integer, then add the rank's 
             # part to its whole part, as the percentile. 
             # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         
         return percentile
 
@@ -622,9 +650,9 @@ class Airport:
         rank = (0.40 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         else:
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         
         return percentile
 
@@ -638,9 +666,9 @@ class Airport:
         rank = (0.50 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         else:
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         
         return percentile
 
@@ -654,9 +682,9 @@ class Airport:
         rank = (0.60 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         else:
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         
         return percentile
 
@@ -670,9 +698,9 @@ class Airport:
         rank = (0.80 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         else:
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         
         return percentile
 
