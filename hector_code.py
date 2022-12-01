@@ -2,6 +2,7 @@
 # 11/21/2022
 
 import csv
+import math
 
 # color formatting for terminal
 MAKE_RED = "\u001b[31;1m"
@@ -11,9 +12,6 @@ MAKE_YELLOW = "\u001b[33;1m"
 MAKE_MAGENTA = "\u001b[35;1m"
 MAKE_CYAN = "\u001b[36;1m"
 RESET = "\u001b[0m"
-
-def math_floor(n):
-    return n // 1
 
 #open csv file
 class Airport:
@@ -91,15 +89,15 @@ class Airport:
             print(i+1, ':', options[i])
 
         while(valid == False):
-            try:
-                ans = int(input('What would you like to do? (1 - '+ str(options_length) +'): '))
+            #try:
+            ans = int(input('What would you like to do? (1 - '+ str(options_length) +'): '))
 
-                if ans < 1 or ans > options_length:
-                    print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
-                else:
-                    valid = True
-            except:
-                print(MAKE_RED, 'Invalid action.', RESET)
+            if ans < 1 or ans > options_length:
+                print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
+            else:
+                valid = True
+            #except:
+                #print(MAKE_RED, 'Invalid action.', RESET)
         
         ans -= 1
 
@@ -400,7 +398,7 @@ class Airport:
         median = values_list[0]
 
         # get index of middle number.
-        middleIndex = math_floor(count / 2)
+        middleIndex = math.floor(count / 2)
 
         # scenario 1: if the count is odd, return the middle-most number.
         if (count % 2) == 1:
@@ -508,12 +506,12 @@ class Airport:
         
         # if rank is an integer, then use the rank as an index and get the value at that index.
         if rank.is_integer():
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         else:
             # if rank is a float, then get the value at that index as a integer, then add the rank's 
             # part to its whole part, as the percentile. 
             # We thought we had to return the actual value in the array, instead of a float, so we return that as well.
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         
         return percentile
 
@@ -527,9 +525,9 @@ class Airport:
         rank = (0.40 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         else:
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         
         return percentile
 
@@ -543,9 +541,9 @@ class Airport:
         rank = (0.50 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         else:
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         
         return percentile
 
@@ -559,9 +557,9 @@ class Airport:
         rank = (0.60 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         else:
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         
         return percentile
 
@@ -575,9 +573,9 @@ class Airport:
         rank = (0.80 * (count - 1)) + 1
         
         if rank.is_integer():
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         else:
-            percentile = sorted_list[math_floor(rank) - 1]
+            percentile = sorted_list[math.floor(rank) - 1]
         
         return percentile
 
