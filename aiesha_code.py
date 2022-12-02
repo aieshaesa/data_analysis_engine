@@ -21,6 +21,7 @@ class Airport:
     chosen_column = []
     column = []
     size = 0
+    filename = ""
 
 
     def file_input(self):
@@ -110,6 +111,7 @@ class Airport:
     # not all actions can be made towards particular columns, so exceptions must be raised to prevent errors.    
     def menu(self):
         ans = 0
+        ##############################[ User Actions ]##############################
         while(ans != 3):
             valid = False
             options = ['Load Data', 'Exploring Data', 'Data Analysis', 'Quit']
@@ -138,27 +140,13 @@ class Airport:
 
                 ##############################[ User Actions ]##############################
 
-                column_number = None
-                
-                """
-                # if we are dropping columns, printing rows, or showing 
-                # the analysis don't list the columns.
-                if ans != 0 and ans != 16 and ans != 17:
-                    column_number = self.choose_column()
-                
-                    chosen_column_list = self.list_for_chosen_column(column_number)
-                    chosen_column_header = self.chosen_column[0]
-                    
-                    chosen_column_length = len(self.chosen_column)
-                """
-
                 # Load Data Set
                 if ans == 0:
                     print(MAKE_BLUE, '\nLoad data set:\n**************', RESET)
 
-                    filename = self.file_input()
+                    self.filename = self.file_input()
                     time = self.get_time()
-                    total_time = self.load_file(filename)
+                    total_time = self.load_file(self.filename)
 
                     time = self.get_time()
                     total_columns = len(self.columns_as_lists)
@@ -385,8 +373,8 @@ class Airport:
                         if choice == 5:
                             print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], ':\n********************', RESET)
 
-                            self.choose_column()
-                            self.sort_column(self.chosen_column)
+                            num = self.choose_column()
+                            self.sort_column(num)
                         
                         # print first 100, 1000, or 5000 rows
                         if choice == 6:
@@ -454,7 +442,8 @@ class Airport:
 
     # sorts a column given a choice of a column number.
     # checking if a column is numerical is needed to sort only numbers or only strings as keys.
-    def sort_column(self, column_chosen):
+    def sort_column(self, column_choice):
+        column_chosen = self.columns_as_lists[column_choice]
         copy_of_column_chosen = column_chosen[1:]
 
         option = None
@@ -491,6 +480,9 @@ class Airport:
                 column_chosen[1:] = copy_of_column_chosen
 
                 print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in descending order.", RESET)
+        
+        print(MAKE_GREEN, copy_of_column_chosen, RESET)
+            
 
     # deletes a column from loaded dataset.
     # all the columns in the dataset are the only valid ones to be deleted,
@@ -543,22 +535,6 @@ class Airport:
     # it first checks if a column is numerical or not to make sure it's comparing
     # numbers to numbers and strings to strings.
     # returns: the value to look for, and the count as the result.
-    """
-    def count_distinct_value(self, column_number, value_to_look):
-        chosen_column_list = self.columns_as_lists[column_number][1:]
-        count = 0
-
-        if self.column_is_numerical(chosen_column_list):
-            for value in chosen_column_list:
-                if float(value) == float(value_to_look):
-                    count += 1
-        else:
-            for value in chosen_column_list:
-                if value == value_to_look:
-                    count += 1
-
-        return value_to_look, count
-    """
     def count_distinct_value(self, number):
         valid = False
         count = 0
