@@ -601,7 +601,6 @@ class Airport:
         print("\n")
 
         print("1. How many airlines are included in the data set? Print the first 5 in alphabetical order.")
-
         first5Distinct = self.unique(self.columns_as_lists[8][1:])
 
         print(MAKE_YELLOW, "There are", len(first5Distinct), "airlines in the dataset. The first 5 are:", RESET)
@@ -622,8 +621,24 @@ class Airport:
         for index in range(5):
             print(MAKE_YELLOW, last5Distinct[index], RESET)
 
-        # print("3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
-        #print(MAKE_YELLOW, , RESET)
+        print ("3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
+        plane_ages = {}
+
+        for index in range(1, self.size - 1):
+            airline = self.columns_as_lists[8][index]
+            age = int(self.columns_as_lists[16][index])
+
+            if airline in plane_ages:
+                if age > plane_ages[airline]:
+                    plane_ages[airline] = age
+            else:
+                plane_ages[airline] = age
+        
+        plane_ages = sorted(plane_ages.items(), reverse = True, key = lambda pair: pair[1])
+        print(MAKE_YELLOW, plane_ages[0][0], "has the oldest plane. The 5 airlines with the 5 oldest planes are:", RESET)
+
+        for index in range(5):
+            print(MAKE_YELLOW, plane_ages[index][0], RESET)
 
         # print("4. What is the airport that averaged the greatest number of passengers recorded in 2019? Print the 5 airport that averaged the greatest number of passengers in 2019.")
         #print(MAKE_YELLOW, , RESET)
@@ -640,7 +655,7 @@ class Airport:
         print("8. What airline carrier experience the most delays in January, July and December")
         airlines_most = {}
 
-        for index in range(self.size - 1):
+        for index in range(1, self.size - 1):
             int_month = self.columns_as_lists[0][index]
             airline = self.columns_as_lists[8][index]
 
@@ -650,13 +665,13 @@ class Airport:
                 else:
                     airlines_most[airline] = 1
 
-        airlines_most = sorted(airlines_most, key = lambda pair: pair[1], reverse = True)
+        airlines_most = sorted(airlines_most.items(), key = lambda pair: pair[1], reverse = True)
         print(MAKE_YELLOW, airlines_most[0], "had the most delays in January, July and December.", RESET)
 
         print("9. What was the average plane age of all planes with delays operated by American Airlines inc.")
         plane_ages = []
 
-        for index in range(self.size - 1):
+        for index in range(1, self.size - 1):
             if self.columns_as_lists[8][index] == "American Airlines Inc.":
                 plane_ages.append(int(self.columns_as_lists[16][index]))
 
