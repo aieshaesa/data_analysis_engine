@@ -121,19 +121,18 @@ class Airport:
             exploring_options_length = len(exploring_options)
 
             try: 
-                print('\nMain Menu:')
-                print('**********')
+                print(MAKE_BLUE, '\nMain Menu:\n**********', RESET)
+
                 for i in range(options_length):
-                    print('(', i+1, ') ', options[i])
+                    print(MAKE_BLUE, '(', i+1, ') ', options[i], RESET)
 
                 while(valid == False):
-                    ans = int(input('\nWhat would you like to do? (1 - '+ str(options_length) +'): '))
-
+                    print(MAKE_CYAN, '\nWhat would you like to do? (1 - '+ str(options_length) +'): ', RESET)
+                    ans = int(input())
                     if ans < 1 or ans > options_length:
                         print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
                     else:
                         valid = True
-                print('\n')
                 # this is so that the answer follows the list counting system which starts at 0
                 ans -= 1
 
@@ -155,8 +154,7 @@ class Airport:
 
                 # Load Data Set
                 if ans == 0:
-                    print('Load data set:')
-                    print('**************')
+                    print(MAKE_BLUE, '\nLoad data set:\n**************', RESET)
 
                     filename = self.file_input()
                     time = self.get_time()
@@ -164,11 +162,11 @@ class Airport:
 
                     time = self.get_time()
                     total_columns = len(self.columns_as_lists)
-                    print("[", time, "] Total Columns Read: ", total_columns)
+                    print(MAKE_GREEN, "[", time, "] Total Columns Read: ", total_columns, RESET)
 
                     time = self.get_time()
                     total_rows = len(self.columns_as_lists[0])
-                    print("[", time, "] Total Rows Read: ", total_rows)
+                    print(MAKE_GREEN, "[", time, "] Total Rows Read: ", total_rows, RESET)
 
                     print(MAKE_YELLOW, "File loaded successfully! time to load ", total_time, RESET)
 
@@ -178,34 +176,32 @@ class Airport:
                     choice = 0
                     while(choice != 7):
                         valid = False
+                        print(MAKE_BLUE, '\n(', ans+1, ') ', options[ans], ':\n************************', RESET)
 
-                        print('\n(', ans+1, ') ', options[ans], ':')
-                        #print("Exploring Data:")
-                        print('************************')
                         for i in range(exploring_options_length):
-                            print('(', i+1, ') ', exploring_options[i])
+                            print(MAKE_BLUE, '(', i+1, ') ', exploring_options[i], RESET)
 
                         while(valid == False):
-                            choice = int(input('\nWhat would you like to do? (1 - '+ str(exploring_options_length) +'): '))
+                            print(MAKE_CYAN, '\nWhat would you like to do? (1 - '+ str(exploring_options_length) +'): ', RESET)
+                            choice = int(input())
 
                             if choice < 1 or choice > exploring_options_length:
                                 print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
                             else:
                                 valid = True
-                        print('\n')
 
                         choice -= 1
                         
                         # list all columns
                         if choice == 0:
-                            print('(', choice+1, ') ', exploring_options[choice])
-                            print('****************')
+                            print(MAKE_BLUE, '\n(', choice+1, ') ', exploring_options[choice], ': ****************', RESET)
+
                             self.print_column_names()
                         
                         # drop columns
                         if choice == 1:
-                            print('(', choice+1, ') ', exploring_options[choice])
-                            print('****************')
+                            print(MAKE_BLUE, '\n(', choice+1, ') ', exploring_options[choice], ': \n****************', RESET)
+
                             if self.size <= 1:
                                 raise Exception("At least 1 column must remain in the dataset.")
                             
@@ -213,7 +209,8 @@ class Airport:
                             self.print_column_names()
 
                             while option < 1 or option > self.size:
-                                option = int(input("Enter a column to drop (1 - "+ str(self.size) +"): "))
+                                print(MAKE_CYAN, "Enter a column to drop (1 - "+ str(self.size) +"): ", RESET)
+                                option = int(input())
 
                             column_dropped_header = self.columns_as_lists[option-1][0]
                             self.drop_column(option)
@@ -222,8 +219,7 @@ class Airport:
                         
                         # describe columns
                         if choice == 2:
-                            print('(', choice+1, ') ', exploring_options[choice])
-                            print('**********************')
+                            print(MAKE_BLUE, '\n(', choice+1, ') ', exploring_options[choice], ': \n**********************', RESET)
                             
                             option = self.choose_column()
 
@@ -232,18 +228,17 @@ class Airport:
 
                             time = self.get_time()
                             start = time
-                            print("[", time, "]", chosen_column_header)
-                            print("\nColumn Stats:")
-                            print("==============")
+                            print(MAKE_GREEN, "[", time, "]", chosen_column_header, RESET)
+                            print(MAKE_GREEN, "\nColumn Stats:\n==============", RESET)
 
-                            print("Count: ", len(self.chosen_column))
-                            print("Unique: ", self.unique(self.chosen_column))
+                            print(MAKE_GREEN, "Count: ", len(self.chosen_column), RESET)
+                            print(MAKE_GREEN, "Unique: ", self.unique(self.chosen_column), RESET)
 
                             mean = self.mean(self.chosen_column)
                             if mean == False:
                                 print(MAKE_RED, 'The column you chose does not include data that can determine mean.', RESET)
                             else:
-                                print("Mean: ", mean)
+                                print(MAKE_GREEN, "Mean: ", mean, RESET)
 
                             median = self.median(self.chosen_column)
                             if median == False:
@@ -318,24 +313,24 @@ class Airport:
 
                         # search element in column
                         if choice == 3:
-                            print('(', choice+1, ') ', exploring_options[choice])
-                            print('****************')
+                            print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], '\n****************', RESET)
                             
                             option = self.choose_column()
 
                             chosen_column_header = self.columns_as_lists[option][0]
                             for i in range(self.size):
                                 if i == option:
-                                    print('The distinct values of', self.columns_as_lists[i][0], 'are: ')
+                                    print(MAKE_CYAN, 'The distinct values of', self.columns_as_lists[i][0], 'are: ', RESET)
                                     distinct_list = self.unique(self.columns_as_lists[i][1:])
 
                                     for value in distinct_list:
-                                        print(value)
+                                        print(MAKE_MAGENTA, value, RESET)
 
                             self.list_for_chosen_column(option)
                             count = 0
 
-                            value = input('Enter element to Search: \n')
+                            print(MAKE_CYAN, 'Enter element to Search: \n', RESET)
+                            value = input()
                             start = self.get_time()
                             # three for loops with try blocks so that ints, floats, and strings
                             # will be counted
@@ -373,8 +368,7 @@ class Airport:
 
                         # count distinct value
                         if choice == 4:
-                            print('(', choice+1, ') ', exploring_options[choice])
-                            print('******************************')
+                            print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], ':\n******************************', RESET)
 
                             option = self.choose_column()
 
@@ -389,8 +383,16 @@ class Airport:
                         
                         # sort column
                         if choice == 5:
-                            print('(', choice+1, ') ', exploring_options[choice])
-                            print('********************')
+                            print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], ':\n********************', RESET)
+
+                            self.choose_column()
+                            self.sort_column(self.chosen_column)
+                        
+                        # print first 100, 1000, or 5000 rows
+                        if choice == 6:
+                            print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], ':\n********************', RESET)
+
+                            self.print_rows()
 
 
                 #analysis
@@ -419,7 +421,7 @@ class Airport:
     # this is needed to show options to the user which columns are available to work with.
     def print_column_names(self):
         for i in range(self.size):
-            print(i+1,":", self.columns_as_lists[i][0])
+            print(MAKE_MAGENTA, i+1,":", self.columns_as_lists[i][0], RESET)
 
         print("\n")
 
@@ -452,14 +454,14 @@ class Airport:
 
     # sorts a column given a choice of a column number.
     # checking if a column is numerical is needed to sort only numbers or only strings as keys.
-    def sort_column(self, column_choice):
-        column_chosen = self.columns_as_lists[column_choice]
+    def sort_column(self, column_chosen):
         copy_of_column_chosen = column_chosen[1:]
 
         option = None
 
         while option != "asc" and option != "desc":
-            option = input("Which sort order use? (asc|desc): ")
+            print(MAKE_CYAN, "Which sort order use? (asc|desc): ", RESET)
+            option = input()
 
         if self.column_is_numerical(column_chosen):
             # ascending order
@@ -503,7 +505,7 @@ class Airport:
         time = self.get_time()
         self.print_column_names()
         while option < 1 or option > self.size:
-            print("[", time, "] Enter Column Number (1 - "+ str(self.size) +"): \n")
+            print(MAKE_CYAN, "[", time, "] Enter Column Number (1 - "+ str(self.size) +"): \n", RESET)
             option = int(input())
 
         return option-1
@@ -563,19 +565,19 @@ class Airport:
 
         for i in range(self.size):
             if i == number:
-                print('The distinct values of', self.columns_as_lists[i][0], 'are: ')
+                print(MAKE_BLUE, 'The distinct values of', self.columns_as_lists[i][0], 'are: ', RESET)
                 distinct_list = self.unique(self.columns_as_lists[i][1:])
                 num = 0
                 for value in distinct_list:
-                    print(num+1, ':', value)
+                    print(MAKE_MAGENTA, num+1, ':', value, RESET)
                     num += 1
 
                 while(valid == False):
-                    choice = input('Which value would you like to count? ')
-                    choice = int(choice)
+                    print(MAKE_CYAN, 'Which value would you like to count? ', RESET)
+                    choice = int(input())
                     choice -= 1
                     if choice < 0 or choice > num+1:
-                        print('Number given isn\'t valid, please try again')
+                        print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
                     else:
                         num = 0
                         for value in distinct_list:
@@ -856,11 +858,11 @@ class Airport:
         N = 0
 
         while N != 100 and N != 1000 and N != 5000:
-            N = int(input("How many rows to display? (100|1000|5000): "))
-        
+            print(MAKE_CYAN, "How many rows to display? (100|1000|5000): ", RESET)
+            N = int(input())
         for row_index in range(0, N):
             for column in self.columns_as_lists:
-                print(column[row_index], end = " ")
+                print(MAKE_GREEN, column[row_index], end = " ")
             
             print(end = "\n")
 
