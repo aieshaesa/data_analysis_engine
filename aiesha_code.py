@@ -385,8 +385,8 @@ class Airport:
 
                 #analysis
                 if ans == 2:
-                    print('(', ans+1, ') ', options[ans], ':')
-                    print('******************')
+                    print(MAKE_BLUE, '(', ans+1, ') ', exploring_options[ans], ':\n******************************', RESET)
+                    self.print_analysis()
 
                 if ans == 3:
                     print(MAKE_MAGENTA, '\nThank you for testing our program! :)\n', RESET)
@@ -842,33 +842,81 @@ class Airport:
             
             print(end = "\n")
 
+    # function to answer analysis question 6
+    def most_frequent(self, values):
+        counter = 0
+        num = values[0]
+
+        for i in values:
+            curr_freq = values.count(i)
+            if(curr_freq > counter):
+                counter = curr_freq
+                num = i
+        
+        return num
+
+
     # displays the questions and answers for part 4. (Analysis)
     # each question requires a problem to be solved in code, before the answer is displayed.
+
     def print_analysis(self):
         int_to_month = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
         print("\n")
 
-        print("1. How many airlines are included in the data set? Print the first 5 in alphabetical order.")
+        # print("1. How many airlines are included in the data set? Print the first 5 in alphabetical order.")
+
+        # first5Airlines = []
+
+        # for i in range(5):
+        #     first5Airlines.append(self.columns_as_lists[8][i + 1])
+
+        # first5Airlines.sort()
+
+        # for airline in first5Airlines:
+        #     print(MAKE_YELLOW, airline, RESET)
 
         print("2. How many departing airports are included in the data set? Print the last 5 in alphabetical order.")
 
-        print("3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
+        last5Distinct = self.unique(self.columns_as_lists[17][1:])
+
+        print(MAKE_YELLOW, "There are", len(last5Distinct), "departing airports in the dataset. The last 5 are:", RESET)
+
+        last5Distinct = last5Distinct[len(last5Distinct)-6:len(last5Distinct)]
+        last5Distinct.sort()
+        
+        for index in range(5):
+            print(MAKE_YELLOW, last5Distinct[index], RESET)
+
+        # print("3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
 
         print("4. What is the airport that averaged the greatest number of passengers recorded in 2019? Print the 5 airport that averaged the greatest number of passengers in 2019.")
+        self.list_for_chosen_column(12)
+        number = self.most_frequent(self.chosen_column)
+        airport = ""
+        for i in range(len(self.columns_as_lists[0])):
+            if self.columns_as_lists[i][12] == number:
+                airport = self.columns_as_lists[i][17]
 
-        print("5. What is the airline that averaged the greatest number of employees (Flight attendants and ground service) in 2019? Print the 5 airlines that averaged the greatest number of employees in 2019.")
+        print(MAKE_YELLOW, "The airport that averaged the greatest number of passengers was", airport, ". There were", self.chosen_column.count(number), "delays that month.")
+
+        # print("5. What is the airline that averaged the greatest number of employees (Flight attendants and ground service) in 2019? Print the 5 airlines that averaged the greatest number of employees in 2019.")
 
         print("6. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
+        self.list_for_chosen_column(0)
+        number = self.most_frequent(self.chosen_column)
+        print(MAKE_YELLOW, "The month with the most delays was", int_to_month[number], ". There were", self.chosen_column.count(number), "delays that month.")
+
         
-        print("7. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
+        #print("7. What was the day of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
 
-        print("8. What airline carrier experience the most delays in January, July and December")
+        # print("8. What airline carrier experience the most delays in January, July and December")
 
-        print("9. What was the average plane age of all planes with delays operated by American Airlines inc.")
+        # print("9. What was the average plane age of all planes with delays operated by American Airlines inc.")
 
-        print("10. WHow many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
+        # print("10. WHow many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
 
-        print("11. What are the 5 airports (Departing Airports) that had the most delays in 2019? Print the airports and the number of delays")
+        # print("11. What are the 5 airports (Departing Airports) that had the most delays in 2019? Print the airports and the number of delays")
+
 
 # Main Code
 info = Airport() 
