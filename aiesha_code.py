@@ -159,7 +159,7 @@ class Airport:
                     print(MAKE_YELLOW, "File loaded successfully! time to load ", total_time, RESET)
 
                 # Exploring Data
-                if ans == 1:
+                if ans == 1 and self.filename != "":
                     print('\n')
                     choice = 0
                     while(choice != 7):
@@ -300,7 +300,7 @@ class Airport:
                             print(MAKE_YELLOW, "Stats printed successfully! time to process is ", total_time, RESET)
 
                         # search element in column
-                        if choice == 3:
+                        if choice == 3 and self.filename != "":
                             print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], '\n****************', RESET)
                             
                             option = self.choose_column()
@@ -384,13 +384,15 @@ class Airport:
 
 
                 #analysis
-                if ans == 2:
+                if ans == 2 and self.filename != "":
                     print(MAKE_BLUE, '(', ans+1, ') ', exploring_options[ans], ':\n******************************', RESET)
                     self.print_analysis()
 
                 if ans == 3:
                     print(MAKE_MAGENTA, '\nThank you for testing our program! :)\n', RESET)
 
+                if ans > 0 and ans < 3 and self.filename == "":
+                    print(MAKE_RED, "LOAD DATA REQUIRED", RESET)  
 
             except ValueError:
                 print(MAKE_RED, 'The column you chose does not include integers or floats for this action.', RESET)
