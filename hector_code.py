@@ -600,19 +600,29 @@ class Airport:
         int_to_month = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
         print("\n")
 
-        print("1. How many airlines are included in the data set? Print the first 5 in alphabetical order.")
+        # print("1. How many airlines are included in the data set? Print the first 5 in alphabetical order.")
 
-        first5Airlines = []
+        # first5Airlines = []
 
-        for i in range(5):
-            first5Airlines.append(self.columns_as_lists[8][i + 1])
+        # for i in range(5):
+        #     first5Airlines.append(self.columns_as_lists[8][i + 1])
 
-        first5Airlines.sort()
+        # first5Airlines.sort()
 
-        for airline in first5Airlines:
-            print(MAKE_YELLOW, airline, RESET)
+        # for airline in first5Airlines:
+        #     print(MAKE_YELLOW, airline, RESET)
 
-        # print("2. How many departing airports are included in the data set? Print the last 5 in alphabetical order.")
+        print("2. How many departing airports are included in the data set? Print the last 5 in alphabetical order.")
+
+        last5Distinct = self.unique(self.columns_as_lists[17][1:])
+
+        print(MAKE_YELLOW, "There are", len(last5Distinct), "departing airports in the dataset. The last 5 are:", RESET)
+
+        last5Distinct = last5Distinct[len(last5Distinct)-6:len(last5Distinct)]
+        last5Distinct.sort()
+        
+        for index in range(5):
+            print(MAKE_YELLOW, last5Distinct[index], RESET)
 
         # print("3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
 
