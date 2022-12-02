@@ -343,7 +343,7 @@ class Airport:
     # retrieves the number of occurences of a value in a given column.
     # it first checks if a column is numerical or not to make sure it's comparing
     # numbers to numbers and strings to strings.
-    # returns: the value to look for, and the count as the result.
+    # returns: a tuple containing the value to look for, and the count as the result.
     def count_distinct_value(self, column_number, value_to_look):
         chosen_column_list = self.columns_as_lists[column_number][1:]
         count = 0
@@ -604,7 +604,7 @@ class Airport:
 
         first5Distinct = self.unique(self.columns_as_lists[8][1:])
 
-        print(MAKE_YELLOW, "There are", len(first5Distinct), "arlines in the dataset. The first 5 are:", RESET)
+        print(MAKE_YELLOW, "There are", len(first5Distinct), "airlines in the dataset. The first 5 are:", RESET)
         first5Distinct.sort()
 
         for index in range(5):
@@ -637,27 +637,57 @@ class Airport:
         # print("7. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
         #print(MAKE_YELLOW, , RESET)
 
-        # print("8. What airline carrier experience the most delays in January, July and December")
-        #print(MAKE_YELLOW, , RESET)
+        print("8. What airline carrier experience the most delays in January, July and December")
+        airlines_most = {}
 
-        # print("9. What was the average plane age of all planes with delays operated by American Airlines inc.")
-        #print(MAKE_YELLOW, , RESET)
+        for index in range(self.size - 1):
+            int_month = self.columns_as_lists[0][index]
+            airline = self.columns_as_lists[8][index]
 
-        # print("10. WHow many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
-        #print(MAKE_YELLOW, , RESET)
+            if (int_month == "1" or int_month == "7" or int_month == "12"):
+                if airline in airlines_most:
+                    airlines_most[airline] += 1
+                else:
+                    airlines_most[airline] = 1
+
+        airlines_most = sorted(airlines_most, key = lambda pair: pair[1], reverse = True)
+        print(MAKE_YELLOW, airlines_most[0], "had the most delays in January, July and December.", RESET)
+
+        print("9. What was the average plane age of all planes with delays operated by American Airlines inc.")
+        plane_ages = []
+
+        for index in range(self.size - 1):
+            if self.columns_as_lists[8][index] == "American Airlines Inc.":
+                plane_ages.append(int(self.columns_as_lists[16][index]))
+
+        print(MAKE_YELLOW, "The average plane age operated by American Airlines Inc. is ", self.mean(plane_ages), RESET)
+        
+        print("10. How many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
+        plane_count = 0
+
+        for index in range(len(self.columns_as_lists) - 1):
+            if self.columns_as_lists[2][index] == "1" and float(self.columns_as_lists[22][index]) > 0.15:
+                plane_count += 1
+
+
+        print(MAKE_YELLOW, "There were", plane_count, "planes that were delayed for more than minutes in days with heavy snow.", RESET)
 
         print("11. What are the 5 airports (Departing Airports) that had the most delays in 2019? Print the airports and the number of delays")
+        print(MAKE_YELLOW, "The 5 departing airports with the most delays are:", RESET)
+
         departing_airports_unique = self.unique(self.columns_as_lists[17][1:])
         first_5_most_delays = []
 
         for airport in departing_airports_unique:
-            self.count_distinct_value()
-            
-        print(MAKE_YELLOW, , RESET)
+            first_5_most_delays.append(self.count_distinct_value(17, airport))
+        
+        first_5_most_delays.sort(reverse = True, key = lambda tup: tup[1])
+        
+        for i in range(5):
+            print(MAKE_YELLOW, first_5_most_delays[i][0], "-\t", first_5_most_delays[i][1], "delays.", RESET)
 
 # Main Code
-#file = 'Airline_Delays_500_Lines.csv'
-file = "Airline_Delays_500_Lines.csv"
+file = 'Airline_Delays_500_Lines.csv'
 info = Airport(file) 
 
 valid_input = False
