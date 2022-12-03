@@ -881,16 +881,28 @@ class Airport:
 
         print("4. What is the airport that averaged the greatest number of passengers recorded in 2019? Print the 5 airport that averaged the greatest number of passengers in 2019.")
         self.list_for_chosen_column(12)
-        #number = self.most_frequent(self.chosen_column)
+        number = self.most_frequent(self.chosen_column)
         airport = ""
         
+        """
         for i in range(len(self.columns_as_lists[0])):
             if self.columns_as_lists[i][12] == number:
                 airport = self.columns_as_lists[i][17]
+        """
         
-        print(MAKE_YELLOW, "The airport that averaged the greatest number of passengers was", airport, ". There were", self.chosen_column.count(number), "delays that month.")
+        print(MAKE_YELLOW, "The airport that averaged the greatest number of passengers was", airport, ". There were", self.chosen_column.count(number), "passengers that month.")
         
-        # print("5. What is the airline that averaged the greatest number of employees (Flight attendants and ground service) in 2019? Print the 5 airlines that averaged the greatest number of employees in 2019.")
+        print("5. What is the airline that averaged the greatest number of employees (Flight attendants and ground service) in 2019? Print the 5 airlines that averaged the greatest number of employees in 2019.")
+        self.list_for_chosen_column(13)
+        number = self.most_frequent(self.chosen_column)
+        airport = ""
+        """
+        for i in range(len(self.columns_as_lists[0])):
+            if self.columns_as_lists[i][12] == number:
+                airport = self.columns_as_lists[i][17]
+        """
+
+        print(MAKE_YELLOW, "The airline that averaged the greatest number of passengers was", airport, ". There were", self.chosen_column.count(number), "passengers that month.")
 
         print("6. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
         self.list_for_chosen_column(0)
