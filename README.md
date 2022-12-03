@@ -1,7 +1,6 @@
 # data_analysis_engine
 Program to read, sort, and search data from csv files.
 
-
 Tasks:
 - Load the CSV file into array or data frame SPENCER
 - List all columns in dataset and offer user the possiblity to drop any of them: AIESHA (DONE)
@@ -28,16 +27,3 @@ Part 3 Functions:
 - 50 Percentile: MOSTAFA (DONE)
 - 60 Percentile: MOSTAFA (DONE)
 - 80 Percentile: MOSTAFA (DONE)
-
-Analysis:
-- What was the month of the year in 2019 with most delays overall? 
-  How many delays were recorded in that month?
-- What was the day of the year in 2019 with most delays overall? 
-  How many delays were recorded in that day?
-- What airline carrier experienced the most delays in January, July 
-  and December?
-- What was the average plane age of all planes with delays operated by 
-  American Airlines Inc.?
-- How many planes were delayed for more than 15 minutes during days with 
-  "heavy snow" (days when the inches of snow on ground were 15 or more)?
-- What are the 5 Airports that had the most delays in 2019? 
