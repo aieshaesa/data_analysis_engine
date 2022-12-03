@@ -348,10 +348,11 @@ class Airport:
 
                             for value in unique_list:
                                 index += 1
-                                print(index, ":", value)
+                                print(MAKE_MAGENTA, index, ":", value, RESET)
                                     
                             while option < 1 or option > index:
-                                option = int(input("Which value would you like to count? (1 - "+ str(index) +"): "))
+                                print(MAKE_CYAN, "Which value would you like to count? (1 - "+ str(index) +"): ", RESET)
+                                option = int(input())
                                     
                             total_time, distinct_value, count = self.count_distinct_value(column_number, unique_list[option - 1])
                             if count > 0:
@@ -884,13 +885,13 @@ class Airport:
         number = self.most_frequent(self.chosen_column)
         airport = ""
         
-        """
         for i in range(len(self.columns_as_lists[0])):
-            if self.columns_as_lists[i][12] == number:
-                airport = self.columns_as_lists[i][17]
-        """
+            if int(self.columns_as_lists[12][i]) == number:
+                airport = self.columns_as_lists[17][i]
+                break
         
-        print(MAKE_YELLOW, "The airport that averaged the greatest number of passengers was", airport, ". There were", self.chosen_column.count(number), "passengers that month.")
+        
+        print(MAKE_YELLOW, "The airport that averaged the greatest number of passengers was", airport, ". There were", self.chosen_column.count(number), "passengers that month.", RESET)
         
         print("5. What is the airline that averaged the greatest number of employees (Flight attendants and ground service) in 2019? Print the 5 airlines that averaged the greatest number of employees in 2019.")
         self.list_for_chosen_column(13)
