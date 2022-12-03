@@ -5,6 +5,7 @@ import os
 import csv
 import math
 import datetime
+from collections import Counter
 
 # color formatting for terminal
 MAKE_RED = "\u001b[31;1m"
@@ -44,40 +45,12 @@ class Airport:
                     good_file = True
                     file = i
         return file
+    
 
-    def load_file(self, filename):
-        lines = []
-        missing = 'NONE'
+    def load_file(self, file):
+        missing = "NONE"
         start = self.get_time()
-        with open(filename, 'r') as read_file:
-            reader = csv.reader(read_file)
 
-            for row in reader:
-                lines.append(row)
-
-                for field in row:
-                    if field == missing:
-                        lines.remove(row)
-
-        # for loop to ensure no duplicates are added
-        no_dup = []
-        for i in lines:
-            if i not in no_dup:
-                no_dup.append(i)
-
-        with open('No_Missing_Values.csv', 'w', newline='') as write_file:
-            writer = csv.writer(write_file)
-            writer.writerows(no_dup)
-
-        self.load_lists('No_Missing_Values.csv')
-        end = self.get_time()
-
-        total_time = end - start
-
-        return total_time
-
-
-    def load_lists(self, file):
         with open(file) as csv_file:
             # creating an object of csv reader
             # with the delimiter
@@ -85,9 +58,15 @@ class Airport:
         
             # loop to iterate through the rows of csv
             for row in csv_reader:
-        
+                found_none = False
                 # adding first row
-                self.column.append(row)
+                for field in row:
+                    if field == missing:
+                        found_none = True
+                        break
+                if found_none == False:
+                    if row not in self.column:
+                        self.column.append(row)
         
                 # breaking the loop after the
                 # first iteration itself
@@ -105,6 +84,11 @@ class Airport:
             self.columns_as_lists = [list(c) for c in zip(*reader)]
                 
         self.remove_punctuation()
+
+        end = self.get_time()
+        total_time = end - start
+
+        return total_time
 
     # prints the menu to the terminal that servers as the main interface to the user.
     # all the options listed are the ones that are valid to choose from.
@@ -159,7 +143,7 @@ class Airport:
                     print(MAKE_YELLOW, "File loaded successfully! time to load ", total_time, RESET)
 
                 # Exploring Data
-                if ans == 1:
+                if ans == 1 and self.filename != "":
                     print('\n')
                     choice = 0
                     while(choice != 7):
@@ -300,7 +284,7 @@ class Airport:
                             print(MAKE_YELLOW, "Stats printed successfully! time to process is ", total_time, RESET)
 
                         # search element in column
-                        if choice == 3:
+                        if choice == 3 and self.filename != "":
                             print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], '\n****************', RESET)
                             
                             option = self.choose_column()
@@ -356,19 +340,26 @@ class Airport:
 
                         # count distinct value
                         if choice == 4:
-                            print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], ':\n******************************', RESET)
+                            column_number = self.choose_column()
+                            self.list_for_chosen_column(column_number)
+                            unique_list = self.unique(self.chosen_column)
+                            index = 0
+                            option = -1
 
-                            option = self.choose_column()
-
-                            total_time, distinct_value, count = self.count_distinct_value(option)
-                            time = self.get_time()
-
+                            for value in unique_list:
+                                index += 1
+                                print(index, ":", value)
+                                    
+                            while option < 1 or option > index:
+                                option = int(input("Which value would you like to count? (1 - "+ str(index) +"): "))
+                                    
+                            total_time, distinct_value, count = self.count_distinct_value(column_number, unique_list[option - 1])
                             if count > 0:
                                 print(MAKE_GREEN, '[', time, '] The amount of times', distinct_value, 'is in the data is', count, 'time(s).', RESET)
                                 print(MAKE_YELLOW, 'Total time to count distinct value ', total_time, RESET)
                             else:
                                 print(MAKE_RED, '[', time, '] Element was not found in data', RESET)
-                        
+
                         # sort column
                         if choice == 5:
                             print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], ':\n********************', RESET)
@@ -384,13 +375,15 @@ class Airport:
 
 
                 #analysis
-                if ans == 2:
+                if ans == 2 and self.filename != "":
                     print(MAKE_BLUE, '(', ans+1, ') ', exploring_options[ans], ':\n******************************', RESET)
                     self.print_analysis()
 
                 if ans == 3:
                     print(MAKE_MAGENTA, '\nThank you for testing our program! :)\n', RESET)
 
+                if ans > 0 and ans < 3 and self.filename == "":
+                    print(MAKE_RED, "LOAD DATA REQUIRED", RESET)  
 
             except ValueError:
                 print(MAKE_RED, 'The column you chose does not include integers or floats for this action.', RESET)
@@ -535,42 +528,24 @@ class Airport:
     # it first checks if a column is numerical or not to make sure it's comparing
     # numbers to numbers and strings to strings.
     # returns: the value to look for, and the count as the result.
-    def count_distinct_value(self, number):
-        valid = False
+    def count_distinct_value(self, column_number, value_to_look):
+        start = self.get_time()
+        chosen_column_list = self.columns_as_lists[column_number][1:]
         count = 0
 
-        for i in range(self.size):
-            if i == number:
-                print(MAKE_BLUE, 'The distinct values of', self.columns_as_lists[i][0], 'are: ', RESET)
-                distinct_list = self.unique(self.columns_as_lists[i][1:])
-                num = 0
-                for value in distinct_list:
-                    print(MAKE_MAGENTA, num+1, ':', value, RESET)
-                    num += 1
+        if self.column_is_numerical(chosen_column_list):
+            for value in chosen_column_list:
+                if float(value) == float(value_to_look):
+                    count += 1
+        else:
+            for value in chosen_column_list:
+                if value == value_to_look:
+                    count += 1
+        end = self.get_time()
+        total_time = end - start
 
-                while(valid == False):
-                    print(MAKE_CYAN, 'Which value would you like to count? ', RESET)
-                    choice = int(input())
-                    choice -= 1
-                    if choice < 0 or choice > num+1:
-                        print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
-                    else:
-                        num = 0
-                        for value in distinct_list:
-                            num += 1
-                            if num == choice+1:
-                                distinct = value
-                        valid = True
+        return total_time, value_to_look, count
 
-                start = self.get_time()
-                for i in range(len(self.columns_as_lists[number])):
-                    if self.columns_as_lists[number][i] == distinct:
-                        count += 1
-                end = self.get_time()
-
-                total_time = end - start
-
-        return total_time, distinct, count
 
     # creates a list of unique values of a given generic list.
     # it will convert both dictionaries and sets into a list that can be indexed.
@@ -863,17 +838,14 @@ class Airport:
         int_to_month = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
         print("\n")
 
-        # print("1. How many airlines are included in the data set? Print the first 5 in alphabetical order.")
+        print("1. How many airlines are included in the data set? Print the first 5 in alphabetical order.")
+        first5Distinct = self.unique(self.columns_as_lists[8][1:])
 
-        # first5Airlines = []
+        print(MAKE_YELLOW, "There are", len(first5Distinct), "airlines in the dataset. The first 5 are:", RESET)
+        first5Distinct.sort()
 
-        # for i in range(5):
-        #     first5Airlines.append(self.columns_as_lists[8][i + 1])
-
-        # first5Airlines.sort()
-
-        # for airline in first5Airlines:
-        #     print(MAKE_YELLOW, airline, RESET)
+        for index in range(5):
+            print(MAKE_YELLOW, first5Distinct[index], RESET)
 
         print("2. How many departing airports are included in the data set? Print the last 5 in alphabetical order.")
 
@@ -881,24 +853,43 @@ class Airport:
 
         print(MAKE_YELLOW, "There are", len(last5Distinct), "departing airports in the dataset. The last 5 are:", RESET)
 
-        last5Distinct = last5Distinct[len(last5Distinct)-6:len(last5Distinct)]
+        last5Distinct = last5Distinct[len(last5Distinct)-6:len(last5Distinct) - 1]
         last5Distinct.sort()
-        
+
         for index in range(5):
             print(MAKE_YELLOW, last5Distinct[index], RESET)
 
-        # print("3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
+        print ("3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
+        plane_ages = {}
+
+        for index in range(1, self.size - 1):
+            airline = self.columns_as_lists[8][index]
+            age = int(self.columns_as_lists[16][index])
+
+            if airline in plane_ages:
+                if age > plane_ages[airline]:
+                    plane_ages[airline] = age
+            else:
+                plane_ages[airline] = age
+        
+        plane_ages = sorted(plane_ages.items(), reverse = True, key = lambda pair: pair[1])
+        print(MAKE_YELLOW, plane_ages[0][0], "has the oldest plane. The 5 airlines with the 5 oldest planes are:", RESET)
+
+        for index in range(5):
+            print(MAKE_YELLOW, plane_ages[index][0], RESET)
+
 
         print("4. What is the airport that averaged the greatest number of passengers recorded in 2019? Print the 5 airport that averaged the greatest number of passengers in 2019.")
         self.list_for_chosen_column(12)
-        number = self.most_frequent(self.chosen_column)
+        #number = self.most_frequent(self.chosen_column)
         airport = ""
+        
         for i in range(len(self.columns_as_lists[0])):
             if self.columns_as_lists[i][12] == number:
                 airport = self.columns_as_lists[i][17]
-
+        
         print(MAKE_YELLOW, "The airport that averaged the greatest number of passengers was", airport, ". There were", self.chosen_column.count(number), "delays that month.")
-
+        
         # print("5. What is the airline that averaged the greatest number of employees (Flight attendants and ground service) in 2019? Print the 5 airlines that averaged the greatest number of employees in 2019.")
 
         print("6. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
@@ -907,16 +898,69 @@ class Airport:
         print(MAKE_YELLOW, "The month with the most delays was", int_to_month[number], ". There were", self.chosen_column.count(number), "delays that month.")
 
         
-        #print("7. What was the day of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
+        print("7. What was the day of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
+        delays = self.columns_as_lists[2][1:]
+        month = []
+        days = []
+        List = []
+        List2 = []
+        List3 = []
+        List4 = []
+        for idx,i in enumerate(delays):
+            if i == '1' and idx != 0:
+                days.append(self.columns_as_lists[1][idx])
+        most_delays = max(k for k,v in Counter(days).items() if v>1)
+        
+        print(MAKE_YELLOW,"The day of the week with the most delays was day",most_delays,"and there were",days.count(str(most_delays)),"delays.",RESET)
 
-        # print("8. What airline carrier experience the most delays in January, July and December")
+        print("8. What airline carrier experience the most delays in January, July and December")
+        airlines_most = {}
 
-        # print("9. What was the average plane age of all planes with delays operated by American Airlines inc.")
+        for index in range(1, self.size - 1):
+            int_month = self.columns_as_lists[0][index]
+            airline = self.columns_as_lists[8][index]
 
-        # print("10. WHow many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
+            if (int_month == "1" or int_month == "7" or int_month == "12"):
+                if airline in airlines_most:
+                    airlines_most[airline] += 1
+                else:
+                    airlines_most[airline] = 1
 
-        # print("11. What are the 5 airports (Departing Airports) that had the most delays in 2019? Print the airports and the number of delays")
+        airlines_most = sorted(airlines_most.items(), key = lambda pair: pair[1], reverse = True)
+        print(MAKE_YELLOW, airlines_most[0], "had the most delays in January, July and December.", RESET)
 
+        print("9. What was the average plane age of all planes with delays operated by American Airlines inc.")
+        plane_ages = []
+
+        for index in range(1, self.size - 1):
+            if self.columns_as_lists[8][index] == "American Airlines Inc.":
+                plane_ages.append(int(self.columns_as_lists[16][index]))
+
+        print(MAKE_YELLOW, "The average plane age operated by American Airlines Inc. is ", self.mean(plane_ages), RESET)
+        
+        print("10. How many planes were delayed for more than 15 minutes during days with \"heavy snow\" (Days when the inches of snow on ground were 15 or more) )?")
+        plane_count = 0
+
+        for index in range(len(self.columns_as_lists) - 1):
+            if self.columns_as_lists[2][index] == "1" and float(self.columns_as_lists[22][index]) > 0.15:
+                plane_count += 1
+
+
+        print(MAKE_YELLOW, "There were", plane_count, "planes that were delayed for more than minutes in days with heavy snow.", RESET)
+
+        print("11. What are the 5 airports (Departing Airports) that had the most delays in 2019? Print the airports and the number of delays")
+        print(MAKE_YELLOW, "The 5 departing airports with the most delays are:", RESET)
+
+        departing_airports_unique = self.unique(self.columns_as_lists[17][1:])
+        first_5_most_delays = []
+
+        for airport in departing_airports_unique:
+            first_5_most_delays.append(self.count_distinct_value(17, airport))
+        
+        first_5_most_delays.sort(reverse = True, key = lambda tup: tup[1])
+        
+        for i in range(5):
+            print(MAKE_YELLOW, first_5_most_delays[i][0], "-\t", first_5_most_delays[i][1], "delays.", RESET)
 
 # Main Code
 info = Airport() 
