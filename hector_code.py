@@ -438,6 +438,7 @@ class Airport:
     # checking if a column is numerical is needed to sort only numbers or only strings as keys.
     def sort_column(self, column_choice):
         column_chosen = self.columns_as_lists[column_choice]
+        column_header = column_chosen[0]
         copy_of_column_chosen = column_chosen[1:]
 
         option = None
@@ -452,28 +453,28 @@ class Airport:
                 copy_of_column_chosen.sort(key = float)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in ascending order.", RESET)
+                print(MAKE_GREEN, "Column " + column_header + " sorted in ascending order.", RESET)
 
             # descending order
             elif option == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = float)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in descending order.", RESET)
+                print(MAKE_GREEN, "Column " + column_header + " sorted in descending order.", RESET)
         else:
             # ascending order
             if option == "asc":
                 copy_of_column_chosen.sort(key = str)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in ascending order.", RESET)
+                print(MAKE_GREEN, "Column " + column_header + " sorted in ascending order.", RESET)
 
             # descending order
             elif option == "desc":
                 copy_of_column_chosen.sort(reverse = True, key = str)
                 column_chosen[1:] = copy_of_column_chosen
 
-                print(MAKE_GREEN, "Column " + column_chosen[0] + " sorted in descending order.", RESET)
+                print(MAKE_GREEN, "Column " + column_header+ " sorted in descending order.", RESET)
             
 
     # deletes a column from loaded dataset.
@@ -856,7 +857,7 @@ class Airport:
         last5Distinct.sort()
 
         for index in range(5):
-            print(MAKE_YELLOW, last5Distinct[index], RESET)
+            print(MAKE_YELLOW, "-", last5Distinct[index], RESET)
 
         print("\n3. What airline has the oldest plane? Print the 5 airlines that have the 5 oldest planes recorded.")
         plane_ages = {}
@@ -919,9 +920,16 @@ class Airport:
             print(MAKE_YELLOW, "-", airport_avg_empl[index][0], RESET)
 
         print("\n6. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
-        self.list_for_chosen_column(0)
-        number = self.most_frequent(self.chosen_column)
-        print(MAKE_YELLOW, "The month with the most delays was", int_to_month[number], "and there were", self.chosen_column.count(number), "delays that month.", RESET)
+        mode_of_month = self.mode(self.columns_as_lists[2])
+        month_of_mode_int = 1
+        num_of_delays_month = 0
+
+        for index in range(1, self.size):
+            if self.columns_as_lists[2][index] == mode_of_month:
+                month_of_mode_int = int(self.columns_as_lists[0][index])
+                num_of_delays_month += 1
+
+        print(MAKE_YELLOW, "The month with the most delays overall is", int_to_month[month_of_mode_int], "and there were", num_of_delays_month, "delays that month.", RESET)
 
         
         print("\n7. What was the day of the year in 2019 with most delays overall? And how many delays were recorded in that day?")
@@ -942,7 +950,7 @@ class Airport:
         print("\n8. What airline carrier experience the most delays in January, July and December")
         airlines_most = {}
 
-        for index in range(1, self.size - 1):
+        for index in range(1, self.size):
             int_month = self.columns_as_lists[0][index]
             airline = self.columns_as_lists[8][index]
 
@@ -968,11 +976,11 @@ class Airport:
         plane_count = 0
 
         for index in range(1, len(self.columns_as_lists)):
-            if self.columns_as_lists[2][index] == "1" and float(self.columns_as_lists[22][index]) > 0.15:
+            if self.columns_as_lists[2][index] == "1" and float(self.columns_as_lists[21][index]) > 0.15:
                 plane_count += 1
 
 
-        print(MAKE_YELLOW, "There were", plane_count, "planes that were delayed for more than minutes in days with heavy snow.", RESET)
+        print(MAKE_YELLOW, "There were", plane_count, "planes that were delayed for more than 15 minutes in days with heavy snow.", RESET)
 
         print("\n11. What are the 5 airports (Departing Airports) that had the most delays in 2019? Print the airports and the number of delays")
         print(MAKE_YELLOW, "The 5 departing airports with the most delays are:", RESET)
