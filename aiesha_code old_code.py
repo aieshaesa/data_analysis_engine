@@ -360,6 +360,20 @@ class Airport:
                             else:
                                 print(MAKE_RED, '[', time, '] Element was not found in data', RESET)
 
+                            """
+                            print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], ':\n******************************', RESET)
+
+                            option = self.choose_column()
+
+                            total_time, distinct_value, count = self.count_distinct_value(option)
+                            time = self.get_time()
+
+                            if count > 0:
+                                print(MAKE_GREEN, '[', time, '] The amount of times', distinct_value, 'is in the data is', count, 'time(s).', RESET)
+                                print(MAKE_YELLOW, 'Total time to count distinct value ', total_time, RESET)
+                            else:
+                                print(MAKE_RED, '[', time, '] Element was not found in data', RESET)
+                            """
                         # sort column
                         if choice == 5:
                             print(MAKE_BLUE, '(', choice+1, ') ', exploring_options[choice], ':\n********************', RESET)
@@ -546,6 +560,43 @@ class Airport:
 
         return total_time, value_to_look, count
 
+    """
+    def count_distinct_value(self, column_number,):
+        
+        valid = False
+        count = 0
+
+        for i in range(self.size):
+            if i == number:
+                print(MAKE_BLUE, 'The distinct values of', self.columns_as_lists[i][0], 'are: ', RESET)
+                distinct_list = self.unique(self.columns_as_lists[i][1:])
+                num = 0
+                for value in distinct_list:
+                    print(MAKE_MAGENTA, num+1, ':', value, RESET)
+                    num += 1
+
+                while(valid == False):
+                    print(MAKE_CYAN, 'Which value would you like to count? ', RESET)
+                    choice = int(input())
+                    choice -= 1
+                    if choice < 0 or choice > num+1:
+                        print(MAKE_RED, 'Number given isn\'t valid, please try again', RESET)
+                    else:
+                        num = 0
+                        for value in distinct_list:
+                            num += 1
+                            if num == choice+1:
+                                distinct = value
+                        valid = True
+
+                start = self.get_time()
+                for i in range(len(self.columns_as_lists[number])):
+                    if self.columns_as_lists[number][i] == distinct:
+                        count += 1
+                end = self.get_time()
+
+                total_time = end - start
+        """
 
     # creates a list of unique values of a given generic list.
     # it will convert both dictionaries and sets into a list that can be indexed.
@@ -879,6 +930,7 @@ class Airport:
             print(MAKE_YELLOW, plane_ages[index][0], RESET)
 
 
+        """
         print("4. What is the airport that averaged the greatest number of passengers recorded in 2019? Print the 5 airport that averaged the greatest number of passengers in 2019.")
         self.list_for_chosen_column(12)
         #number = self.most_frequent(self.chosen_column)
@@ -889,7 +941,7 @@ class Airport:
                 airport = self.columns_as_lists[i][17]
         
         print(MAKE_YELLOW, "The airport that averaged the greatest number of passengers was", airport, ". There were", self.chosen_column.count(number), "delays that month.")
-        
+        """
         # print("5. What is the airline that averaged the greatest number of employees (Flight attendants and ground service) in 2019? Print the 5 airlines that averaged the greatest number of employees in 2019.")
 
         print("6. What was the month of the year in 2019 with most delays overall? And how many delays were recorded in that month?")
